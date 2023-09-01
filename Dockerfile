@@ -17,4 +17,4 @@ RUN pip install -r requirements.txt
 
 # Run the web service on container startup
 WORKDIR /app/src
-CMD python manage.py runserver
+CMD python manage.py runserver 8080
