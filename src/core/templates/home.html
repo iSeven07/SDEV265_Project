@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Welcome to My Homepage</title>
-</head>
-<body>
-    <h1>Welcome to my homepage!</h1>
-    <p>This is a basic Django web application.</p>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Recipe Builder Home</h1>
+
+    <p>Welcome to Recipe Builder! Here are the latest recipes:</p>
+    {% for post in posts %}
+        <div style="border-style: dotted; padding-left: 10px; margin: 0 auto;">
+            <h3>{{ post.title }}</h3>
+            <p>Author: {{ post.author }}</p>
+            <p>{{ post.content }}</p>
+            <p style="font-style: italic;">Posted on {{ post.date }}</p>
+        </div>
+        <br>
+    {% endfor %}
+{% endblock content %}
