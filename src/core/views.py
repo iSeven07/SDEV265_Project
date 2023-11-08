@@ -46,6 +46,19 @@ def register(request):
     return render(request, 'register.html', {'title': 'Register', 'form': form})
     
 
+# def submit_recipe(request):
+    if request.method == 'POST':
+        form = RecipeForm(request.POST)
+        if form.is_valid():
+            recipe = form.save(commit=False)
+            recipe.author = request.user
+            form.save()
+            return redirect('recipe-submit')  # Adjust the redirect as needed
+    else:
+        form = RecipeForm()
+    return render(request, 'recipe_submission.html', {'form': form})
+
+
 def submit_recipe(request):
     if request.method == 'POST':
         form = RecipeForm(request.POST)

@@ -2,7 +2,27 @@
 
 {% block content %}
   <h2>Submit a Recipe</h2>
-  <form method="post" action="{% url 'recipe-submit' %}">
+
+  <!-- <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="button" onclick="addIngredientField()">Add Ingredient</button>
+    <button type="submit">Submit</button>
+  </form>
+
+<div id="ingredient-fields"></div>
+
+<script>
+function addIngredientField() {
+    var ingredientDiv = document.getElementById('ingredient-fields');
+    var newIngredientInput = document.createElement('input');
+    newIngredientInput.type = 'text';
+    newIngredientInput.name = 'ingredients';
+    ingredientDiv.appendChild(newIngredientInput);
+}
+</script> -->
+
+ <form method="post" action="{% url 'recipe-submit' %}">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Submit</button>
