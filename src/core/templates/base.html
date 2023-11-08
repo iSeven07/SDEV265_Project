@@ -10,8 +10,15 @@
 <body>
     <!-- Page Header -->
     <div style="text-align:center;">[<a href ='{% url 'recipe-home' %}'>Home</a>] - 
-        [<a href='{% url 'recipe-search' %}'>Search</a>] - 
-        [<a href='{% url 'recipe-register' %}'>Register</a>]</div>
+        [<a href='{% url 'recipe-search' %}'>Search</a>]
+        <!-- Nav links dependant on whether user is logged in -->
+        {% if not user.is_authenticated %}
+            - [<a href='{% url 'recipe-register' %}'>Register</a>]
+        {% else %}
+            - [<a href='{% url 'recipe-submit' %}'>Submit a Recipe</a>]
+        {% endif %}
+    
+    </div>
     <hr>
 
     <!-- Page Content -->
