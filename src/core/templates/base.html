@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% if title %}
+        <title>Recipe Builder - {{ title }}</title>
+    {% else %}
+    <title>Recipe Builder</title>
+    {% endif %}
+</head>
+<body>
+    <!-- Page Header -->
+    <div style="text-align:center;">[<a href ='{% url 'recipe-home' %}'>Home</a>] - 
+        [<a href='{% url 'recipe-search' %}'>Search</a>] - 
+        [<a href='{% url 'recipe-register' %}'>Register</a>]</div>
+    <hr>
+
+    <!-- Page Content -->
+    {% block content %}
+    {% endblock content %}
+
+    <!-- Page Footer -->
+    <br>
+    <hr>
+    <div style="text-align:center;">Project Builder by Group One (Organization Y)</div>
+</body>
+</html>
