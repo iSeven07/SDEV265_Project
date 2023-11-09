@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.http import HttpResponse
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, logout, authenticate
 from .models import Recipes
 from .forms import SignupForm, RecipeForm, LoginForm
 
@@ -90,3 +90,7 @@ def login_page(request):
                 message = 'Login failed!'
     return render(
         request, 'login.html', context={'form': form, 'message': message})
+
+def logout_user(request):
+    logout(request)
+    return redirect('recipe-home')
