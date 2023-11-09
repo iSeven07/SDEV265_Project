@@ -10,12 +10,14 @@ class SignupForm(UserCreationForm):
         model = User
         fields = ('username', 'email', 'password1', 'password2')
 
-#class RecipeForm(forms.ModelForm):
+"""
+class RecipeForm(forms.ModelForm):
     ingredients = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}))
 
     class Meta:
         model = Recipes
         fields = ['title', 'content', 'ingredients']
+"""
 
 class RecipeForm(forms.ModelForm):
 
