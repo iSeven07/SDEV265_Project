@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.http import HttpResponse
-from django.contrib.auth import login
+from django.contrib.auth import login, logout, authenticate
 from .models import Recipes
-from .forms import SignupForm
-from .forms import RecipeForm
+from .forms import SignupForm, RecipeForm, LoginForm
 
 # Dummy Data
 posts = [
@@ -73,3 +72,25 @@ def submit_recipe(request):
         form = RecipeForm()
 
     return render(request, 'recipe_submission.html', {'form': form})
+
+def login_page(request):
+    form = LoginForm()
+    message = ''
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            user = authenticate(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password'],
+            )
+            if user is not None:
+                login(request, user)
+                message = f'Hello {user.username}! You have been logged in'
+            else:
+                message = 'Login failed!'
+    return render(
+        request, 'login.html', context={'form': form, 'message': message})
+
+def logout_user(request):
+    logout(request)
+    return redirect('recipe-home')
