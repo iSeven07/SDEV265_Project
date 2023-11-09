@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login
 from .models import Recipes
 from .forms import SignupForm
+from .forms import RecipeForm
 
 # Dummy Data
 posts = [
@@ -42,4 +43,33 @@ def register(request):
             return redirect('recipe-home')
     else:
         form = SignupForm()
-        return render(request, 'register.html', {'title': 'Register', 'form': form})
+    return render(request, 'register.html', {'title': 'Register', 'form': form})
+    
+
+# def submit_recipe(request):
+    if request.method == 'POST':
+        form = RecipeForm(request.POST)
+        if form.is_valid():
+            recipe = form.save(commit=False)
+            recipe.author = request.user
+            form.save()
+            return redirect('recipe-submit')  # Adjust the redirect as needed
+    else:
+        form = RecipeForm()
+    return render(request, 'recipe_submission.html', {'form': form})
+
+
+def submit_recipe(request):
+    if request.method == 'POST':
+        form = RecipeForm(request.POST)
+        if form.is_valid():
+            # Save the form data to the database
+            new_recipe = form.save(commit=False)
+            new_recipe.author = request.user  # Assuming you have user authentication
+            new_recipe.save()
+            return redirect('recipe-submit')   # Redirect to recipe detail page
+            # removed , pk=new_recipe.pk from ('recipe-submit )
+    else:
+        form = RecipeForm()
+
+    return render(request, 'recipe_submission.html', {'form': form})
