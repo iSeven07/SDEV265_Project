@@ -6,4 +6,5 @@ urlpatterns = [
     path('search/', views.search, name="recipe-search"),
     path('register/', views.register, name="recipe-register"),
     path('submit_recipe/', views.submit_recipe, name='recipe-submit'),
+    path('login/', views.login_page, name='login'),
 ]
