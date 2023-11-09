@@ -45,8 +45,8 @@ def register(request):
         form = SignupForm()
     return render(request, 'register.html', {'title': 'Register', 'form': form})
     
-
-# def submit_recipe(request):
+"""
+ def submit_recipe(request):
     if request.method == 'POST':
         form = RecipeForm(request.POST)
         if form.is_valid():
@@ -57,7 +57,7 @@ def register(request):
     else:
         form = RecipeForm()
     return render(request, 'recipe_submission.html', {'form': form})
-
+"""
 
 def submit_recipe(request):
     if request.method == 'POST':
