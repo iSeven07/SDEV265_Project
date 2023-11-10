@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login, logout, authenticate
 from .models import Recipes
 from .forms import SignupForm, RecipeForm, LoginForm
+from django.contrib import messages
 
 # Dummy Data
 posts = [
@@ -23,26 +24,31 @@ posts = [
 
 # Home View
 def home(request):
-    print(request.headers)
+
     return render(request, "home.html", {'posts': Recipes.objects.all(), 'title': 'Home'})
     # return HttpResponse('<h1>Recipe Home</h1>')
 
 # Search View
 def search(request):
-    print(request.headers)
+
     return render(request, "search.html", {'title': 'Search'})
     # return HttpResponse('<h1>Recipe Search</h1>')
 
+# Register View
 def register(request):
+    message = ''
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
+            messages.success(request, f'Hello {user.username}! Welcome to Recipe Builder!', extra_tags='alert alert-success')
             return redirect('recipe-home')
+        else:
+            message = 'There was a problem creating your account. Check your information.'
     else:
         form = SignupForm()
-    return render(request, 'register.html', {'title': 'Register', 'form': form})
+    return render(request, 'register.html', {'title': 'Register', 'form': form, 'message': message})
     
 """
  def submit_recipe(request):
@@ -58,6 +64,7 @@ def register(request):
     return render(request, 'recipe_submission.html', {'form': form})
 """
 
+# Submit Recipe View
 def submit_recipe(request):
     if request.method == 'POST':
         form = RecipeForm(request.POST)
@@ -73,6 +80,7 @@ def submit_recipe(request):
 
     return render(request, 'recipe_submission.html', {'form': form})
 
+# Login Page View
 def login_page(request):
     form = LoginForm()
     message = ''
@@ -85,12 +93,14 @@ def login_page(request):
             )
             if user is not None:
                 login(request, user)
-                message = f'Hello {user.username}! You have been logged in'
+                messages.success(request, f'Hello {user.username}! You have successfully logged in!', extra_tags='alert alert-success')
+                return redirect('recipe-home')
             else:
                 message = 'Login failed!'
-    return render(
-        request, 'login.html', context={'form': form, 'message': message})
+    return render(request, 'login.html', context={'form': form, 'message': message})
 
+# Logout
 def logout_user(request):
     logout(request)
+    messages.success(request, f'You have successfully logged out!', extra_tags='alert alert-primary')
     return redirect('recipe-home')
