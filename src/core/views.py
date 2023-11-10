@@ -3,9 +3,12 @@ from django.views.generic import ListView, DetailView
 from django.http import HttpResponse
 from django.contrib.auth import login, logout, authenticate
 from .models import Recipes, Profile
-from .forms import SignupForm, RecipeForm, LoginForm
+from .forms import SignupForm, RecipeForm, LoginForm, UpdateUserForm, UpdateProfileForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.messages.views import SuccessMessageMixin
 
 # Dummy Data
 posts = [
@@ -106,8 +109,31 @@ def logout_user(request):
     messages.success(request, f'You have successfully logged out!', extra_tags='alert alert-primary')
     return redirect('recipe-home')
 
-# User Profiles
-
+# User Profile View
 def user_profile(request, username):
     user_profile = get_object_or_404(Profile, user__username=username)
     return render(request, 'profile.html', {'user_profile': user_profile})
+
+# Edit User Profile View, Requires user to be logged in
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        user_form = UpdateUserForm(request.POST, instance=request.user)
+        profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Your profile is updated successfully')
+            return redirect(to='users-profile')
+    else:
+        user_form = UpdateUserForm(instance=request.user)
+        profile_form = UpdateProfileForm(instance=request.user.profile)
+
+    return render(request, 'edit_profile.html', {'user_form': user_form, 'profile_form': profile_form})
+
+# Change Password View
+class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
+    template_name = 'change_password.html'
+    success_message = "Successfully Changed Your Password"
+    success_url = reverse_lazy('edit-profile')
