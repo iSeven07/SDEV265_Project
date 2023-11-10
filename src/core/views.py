@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.http import HttpResponse
 from django.contrib.auth import login, logout, authenticate
-from .models import Recipes
+from .models import Recipes, Profile
 from .forms import SignupForm, RecipeForm, LoginForm
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Dummy Data
 posts = [
@@ -25,7 +26,7 @@ posts = [
 # Home View
 def home(request):
 
-    return render(request, "home.html", {'posts': Recipes.objects.all(), 'title': 'Home'})
+    return render(request, "home.html", {'posts': Recipes.objects.all().order_by('-date'), 'title': 'Home'})
     # return HttpResponse('<h1>Recipe Home</h1>')
 
 # Search View
@@ -104,3 +105,9 @@ def logout_user(request):
     logout(request)
     messages.success(request, f'You have successfully logged out!', extra_tags='alert alert-primary')
     return redirect('recipe-home')
+
+# User Profiles
+
+def user_profile(request, username):
+    user_profile = get_object_or_404(Profile, user__username=username)
+    return render(request, 'profile.html', {'user_profile': user_profile})
