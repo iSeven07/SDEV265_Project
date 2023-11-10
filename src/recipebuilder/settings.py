@@ -127,3 +127,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Message Storage (Used for passing messages between redirects)
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
