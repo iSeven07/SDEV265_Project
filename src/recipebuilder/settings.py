@@ -26,9 +26,9 @@ SECRET_KEY = 'django-insecure-6k5330n%)a-mm=-=k$7g-*!llw(t)aub_m=!v^3_f3=qrkkr0@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', 'https://recipebuilder-5bxz6lpe7a-uc.a.run.app']
+ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1', 'recipebuilder-5bxz6lpe7a-uc.a.run.app']
 
-CSRF_TRUSTED_ORIGINS = ['https://recipebuilder-5bxz6lpe7a-uc.a.run.app']
+CSRF_TRUSTED_ORIGINS = ['recipebuilder-5bxz6lpe7a-uc.a.run.app']
 
 
 # Application definition
