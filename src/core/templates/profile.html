@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>{{ user_profile.user.username }}'s Profile</h2>
+  <p>Bio: {{ user_profile.bio }}</p>
+  {% if user_profile.avatar %}
+    <img class="img-rounded" style="max-width: 200px;" src="{{ user_profile.avatar.url }}" alt="Avatar">
+  {% endif %}
+
+{% if user_profile.user == request.user %}
+  <!-- Display edit button only for the current logged-in user's profile -->
+  <a href="{% url 'edit-profile' %}" class="btn btn-primary">Edit Profile</a>
+{% endif %}
+
+{% endblock %}
