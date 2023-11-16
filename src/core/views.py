@@ -33,10 +33,12 @@ def home(request):
     # return HttpResponse('<h1>Recipe Home</h1>')
 
 # Search View
+"""
 def search(request):
 
     return render(request, "search.html", {'title': 'Search'})
     # return HttpResponse('<h1>Recipe Search</h1>')
+"""
 
 # Register View
 def register(request):
@@ -137,3 +139,16 @@ class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
     template_name = 'change_password.html'
     success_message = "Successfully Changed Your Password"
     success_url = reverse_lazy('edit-profile')
+
+# Search Bar
+def search_bar(request):
+    query = request.GET.get('query')
+
+    if query:
+        # Normalize query and content to lower case for case-insensitive search
+        query = query.strip()
+        results = Recipes.objects.filter(content__icontains=query)
+    else:
+        results = None
+
+    return render(request, 'search.html', {'results': results, 'query': query})
