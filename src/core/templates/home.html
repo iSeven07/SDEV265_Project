@@ -24,10 +24,11 @@
         
         <div class="col-12 col-md-4 mb-4">
             <div class="card d-flex flex-column h-100">
-                <a href="#" class="link-light text-decoration-none"><h5 class="card-header text-bg-dark ">📄 {{ post.title }}</h5></a>
+                <a href="{% url 'recipe_detail' post.id %}" class="link-light text-decoration-none">
+                    <h5 class="card-header text-bg-dark">📄 {{ post.title }}</h5>
+                </a>
                 <div class="card-body">
-                    <h5 class="card-title">{{ post.content }}</h5>
-                    
+                    <h5 class="card-title">{{ post.content }}</h5>                    
                 </div>
                 <div class="card-footer">
                     <p class="card-text">Posted by <a href="profile/{{post.author}}" class="link-dark">{{ post.author }}</a> on {{ post.date }}</p>

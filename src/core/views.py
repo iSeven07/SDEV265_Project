@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.http import HttpResponse
 from django.contrib.auth import login, logout, authenticate
-from .models import Recipes, Profile
+from .models import Recipes, Profile, Rating
 from .forms import SignupForm, RecipeForm, LoginForm, UpdateUserForm, UpdateProfileForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import Avg
 
 # Dummy Data
 posts = [
@@ -152,3 +153,22 @@ def search_bar(request):
         results = None
 
     return render(request, 'search.html', {'results': results, 'query': query})
+
+# Recipe Detail View
+def recipe_detail(request, recipe_id):
+    recipe = Recipes.objects.get(pk=recipe_id)
+    ratings = Rating.objects.filter(recipe=recipe)
+    average_rating = ratings.aggregate(avg_rating=Avg('rating'))['avg_rating']
+
+    return render(request, 'recipe_detail.html', {'recipe': recipe, 'average_rating': average_rating})
+
+# Rating Submission requires login
+@login_required
+def rate_recipe(request, recipe_id):
+    if request.method == 'POST':
+        recipe = get_object_or_404(Recipes, pk=recipe_id)
+        user_rating = int(request.POST.get('rating'))
+        
+        Rating.objects.create(user=request.user, recipe=recipe, rating=user_rating)
+        
+    return redirect('recipe_detail', recipe_id=recipe_id)
