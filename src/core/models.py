@@ -1,9 +1,11 @@
 from django.db import models
 from PIL import Image
-
-# Create your models here.
 from django.contrib.auth.models import User, AbstractUser
 from django.utils import timezone
+from django.core.validators import MinValueValidator, MaxValueValidator
+
+# Create your models here.
+
 
 
 # Recipes Model for DB
@@ -15,6 +17,12 @@ class Recipes(models.Model):
 
     def __str__(self):
         return self.title
+    
+# Rating system for recipe entries
+class Rating(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipes, on_delete=models.CASCADE)
+    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     
 # Extending User Model
 class Profile(models.Model):

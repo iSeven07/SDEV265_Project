@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.http import HttpResponse
 from django.contrib.auth import login, logout, authenticate
-from .models import Recipes, Profile
+from .models import Recipes, Profile, Rating
 from .forms import SignupForm, RecipeForm, LoginForm, UpdateUserForm, UpdateProfileForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import Avg
 
 # Dummy Data
 posts = [
@@ -33,10 +34,12 @@ def home(request):
     # return HttpResponse('<h1>Recipe Home</h1>')
 
 # Search View
+"""
 def search(request):
 
     return render(request, "search.html", {'title': 'Search'})
     # return HttpResponse('<h1>Recipe Search</h1>')
+"""
 
 # Register View
 def register(request):
@@ -137,3 +140,35 @@ class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
     template_name = 'change_password.html'
     success_message = "Successfully Changed Your Password"
     success_url = reverse_lazy('edit-profile')
+
+# Search Bar
+def search_bar(request):
+    query = request.GET.get('query')
+
+    if query:
+        # Normalize query and content to lower case for case-insensitive search
+        query = query.strip()
+        results = Recipes.objects.filter(content__icontains=query)
+    else:
+        results = None
+
+    return render(request, 'search.html', {'results': results, 'query': query})
+
+# Recipe Detail View
+def recipe_detail(request, recipe_id):
+    recipe = Recipes.objects.get(pk=recipe_id)
+    ratings = Rating.objects.filter(recipe=recipe)
+    average_rating = ratings.aggregate(avg_rating=Avg('rating'))['avg_rating']
+
+    return render(request, 'recipe_detail.html', {'recipe': recipe, 'average_rating': average_rating})
+
+# Rating Submission requires login
+@login_required
+def rate_recipe(request, recipe_id):
+    if request.method == 'POST':
+        recipe = get_object_or_404(Recipes, pk=recipe_id)
+        user_rating = int(request.POST.get('rating'))
+        
+        Rating.objects.create(user=request.user, recipe=recipe, rating=user_rating)
+        
+    return redirect('recipe_detail', recipe_id=recipe_id)
