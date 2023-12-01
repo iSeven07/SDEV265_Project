@@ -1,16 +1,47 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2 class="mb-4 mt-2">Register</h2>
+                {% if message != '' %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ message }}
+                    </div>
+                {% endif %}
+                <form method="post">
 
-{% if message != '' %}
-    <div class="alert alert-danger" role="alert">
-        {{ message }}
+                    {% csrf_token %}
+
+                    <div class="mb-3 row">
+                        <label for="{{ form.username.id_for_label }}" class="col-sm-3 col-form-label">Username:</label>
+                        <div class="col-sm-9">
+                            {{ form.username }}
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="{{ form.email.id_for_label }}" class="col-sm-3 col-form-label">Email:</label>
+                        <div class="col-sm-9">
+                            {{ form.email }}
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="{{ form.password1.id_for_label }}" class="col-sm-3 col-form-label">Password:</label>
+                        <div class="col-sm-9">
+                            {{ form.password1 }}
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="{{ form.password2.id_for_label }}" class="col-sm-3 col-form-label">Confirm Password:</label>
+                        <div class="col-sm-9">
+                            {{ form.password2 }}
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+            </div>
+        </div>
     </div>
-{% endif %}
-
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register</button>
-</form>
 {% endblock content %}

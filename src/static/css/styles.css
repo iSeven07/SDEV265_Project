@@ -1,0 +1,51 @@
+body::before {
+    display: block;
+    content: '';
+    height: 60px;
+}
+body {
+    background-color:#ebe6da;
+    color: #343a40;
+}
+
+.navbar {
+    background-color: #fd7e14;
+}
+
+.navbar-brand {
+    color: white;
+}
+
+.navbar-toggler-icon {
+    background-color: white;
+}
+
+.navbar-nav .nav-link {
+    color: white;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #343a40;
+}
+
+
+.navbar .btn-outline-success {
+    color: white; 
+    border-color: #b1b1b1;
+    background-color: #343a40;
+}
+
+.navbar .btn-outline-success:hover {
+    color: white; 
+    border-color: #343a40; 
+    background-color: #7e7d7d
+}
+
+footer {
+    color: #6c757d;
+}
+
+.custom-bg-light-orange {
+    background-color: #fd7e14;
+    color: white;
+}
