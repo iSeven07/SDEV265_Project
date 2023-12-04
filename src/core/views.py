@@ -163,7 +163,7 @@ def recipe_detail(request, recipe_id):
     return render(request, 'recipe_detail.html', {'recipe': recipe, 'average_rating': average_rating})
 
 # Rating Submission requires login
-@login_required
+@login_required(login_url='/login/')
 def rate_recipe(request, recipe_id):
     if request.method == 'POST':
         recipe = get_object_or_404(Recipes, pk=recipe_id)
