@@ -12,7 +12,6 @@
                 {% endif %}
                 <form method="post">
                     {% csrf_token %}
-                    {{ form.as_p }}
 
                     <div class="mb-3 row">
                         <label for="{{ form.username.id_for_label }}" class="col-sm-3 col-form-label">Username:</label>

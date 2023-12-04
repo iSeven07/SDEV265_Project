@@ -1,7 +1,7 @@
 # Django #
  *.log
  *.pot
- *.pyc
+*.[pP][yY][cC]
  __pycache__
 
 # Python # 
