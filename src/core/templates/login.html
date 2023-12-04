@@ -1,11 +1,33 @@
 {% extends 'base.html' %}
+
+
 {% block content %}
-<h1 class="text-center">Registered User Login</h1>
-<br>
-    <p>{{ message }}</p>
-    <form method="post">
-        {{ form.as_p }}
-        {% csrf_token %}
-        <button type="submit" >Submit</button>
-    </form>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <h2>Login</h2>
+                <p>{{ message }}</p>
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3 row">
+                        <label for="{{ form.username.id_for_label }}" class="col-sm-3 col-form-label">Username:</label>
+                        <div class="col-sm-9">
+                            {{ form.username }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label for="{{ form.password.id_for_label }}" class="col-sm-3 col-form-label">Password:</label>
+                        <div class="col-sm-9">
+                            {{ form.password }}
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock content %}
+
