@@ -5,8 +5,9 @@
     <p class="text-center">What will you make today?</p>
     {% if messages %}
         {% for message in messages %}
-            <div {% if message.tags %} class="{{ message.tags }}" {% endif %} role="alert">
+            <div {% if message.tags %} class="container {{ message.tags }}" {% endif %} role="alert">
                 {{ message }}
+            </div>
         {% endfor %}
     {% endif %}
 
@@ -14,7 +15,7 @@
     <div class="container">
 
         <div class="row">
-            {% for post in posts %}
+            {% for recipe in recipes %}
             {% comment %} <div style="border-style: dotted; padding-left: 10px; margin: 0 auto;">
             <h3>{{ post.title }}</h3>
             <p>Author: {{ post.author }}</p>
@@ -24,14 +25,20 @@
         
         <div class="col-12 col-md-4 mb-4">
             <div class="card d-flex flex-column h-100">
-                <a href="{% url 'recipe_detail' post.id %}" class="link-light text-decoration-none">
-                    <h5 class="card-header custom-bg-light-orange">📄 {{ post.title }}</h5>
+                <a href="{% url 'recipe_detail' recipe.id %}" class="link-light text-decoration-none">
+                    <h5 class="card-header custom-bg-light-orange">📄 {{ recipe.title }}</h5>
                 </a>
                 <div class="card-body">
-                    <h5 class="card-title">{{ post.content }}</h5>                    
+                    <h5 class="card-title">{{ recipe.content }}</h5>
+                    <br>
+                    {% if recipe.has_ratings %}
+                        <p>Rating: {{ recipe.avg_rating }}</p>
+                    {% else %}
+                        <p>No Ratings</p>
+                    {% endif %}              
                 </div>
                 <div class="card-footer">
-                    <p class="card-text">Posted by <a href="profile/{{post.author}}" class="link-dark">{{ post.author }}</a> on {{ post.date }}</p>
+                    <p class="card-text">Posted by <a href="profile/{{recipe.author}}" class="link-dark">{{ recipe.author }}</a> on {{ recipe.date }}</p>
                 </div>
             </div>
         </div>

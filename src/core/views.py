@@ -9,7 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
-from django.db.models import Avg
+from django.db.models import Avg, Value, F, Case, When, BooleanField
+from django.db.models.functions import Round
 
 # Dummy Data
 posts = [
@@ -29,8 +30,16 @@ posts = [
 
 # Home View
 def home(request):
-
-    return render(request, "home.html", {'posts': Recipes.objects.all().order_by('-date'), 'title': 'Home'})
+    # Recipe Ratings for each Recipe
+    recipes = Recipes.objects.annotate(
+        avg_rating=Round(Avg('rating__rating'), 1),
+        has_ratings=Case(
+            When(rating__isnull=True, then=Value(False)),
+            default=Value(True),
+            output_field=BooleanField()
+        ) 
+    ).order_by('-date')
+    return render(request, "home.html", {'recipes': recipes, 'title': 'Home'})
     # return HttpResponse('<h1>Recipe Home</h1>')
 
 # Search View
