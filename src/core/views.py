@@ -39,6 +39,16 @@ def home(request):
             output_field=BooleanField()
         ) 
     ).order_by('-date')
+
+    # Used for Displaying Rating as Stars
+    for recipe in recipes:
+        if recipe.avg_rating is not None:
+            recipe.stars_filled = range(int(recipe.avg_rating))
+            recipe.stars_empty = range(5 - int(recipe.avg_rating))
+        else:
+            recipe.stars_filled = []
+            recipe.stars_empty = range(5)
+        
     return render(request, "home.html", {'recipes': recipes, 'title': 'Home'})
     # return HttpResponse('<h1>Recipe Home</h1>')
 

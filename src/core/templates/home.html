@@ -31,11 +31,27 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ recipe.content }}</h5>
                     <br>
-                    {% if recipe.has_ratings %}
+                    
+                    {% comment %} {% if recipe.has_ratings %}
                         <p>Rating: {{ recipe.avg_rating }}</p>
                     {% else %}
                         <p>No Ratings</p>
-                    {% endif %}              
+                    {% endif %}    {% endcomment %}
+
+                    {% if recipe.has_ratings %}
+                    <p class="star-rating">
+                        <span style="color:black;font-size:20px;">{{ recipe.avg_rating }}</span>
+                      {% for _ in recipe.stars_filled %}
+                        <span class="star">★</span>
+                      {% endfor %}
+                      {% for _ in recipe.stars_empty %}
+                        <span class="star">☆</span>
+                      {% endfor %}
+                    </p>
+                  {% else %}
+                    <p>No Ratings</p>
+                  {% endif %}
+
                 </div>
                 <div class="card-footer">
                     <p class="card-text">Posted by <a href="profile/{{recipe.author}}" class="link-dark">{{ recipe.author }}</a> on {{ recipe.date }}</p>

@@ -49,3 +49,14 @@ footer {
     background-color: #fd7e14;
     color: white;
 }
+.star-rating {
+    color: gold;
+    font-size: 30px;
+    display: inline-block;
+}
+
+.star-rating .star {
+    display: inline-block;
+    margin: 0 -2px;  /* Adjust the margin to prevent a gap between stars */
+    filter: drop-shadow(1px 1px 1px black); /* Add this line for a drop shadow */
+}
