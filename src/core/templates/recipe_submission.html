@@ -2,32 +2,33 @@
 
 {% block content %}
 
-<div class=container>
+<div class="container mt-5">
   <h2>Submit a Recipe</h2>
+  {% if messages %}
+      {% for message in messages %}
+          <div class="alert alert-success" role="alert">
+              {{ message }}
+          </div>
+      {% endfor %}
+  {% endif %}
+  <form method="post" action="{% url 'recipe-submit' %}" class="mt-4">
+      {% csrf_token %}
+      <div class="row">
+          <div class="col-md-6 mb-3">
+              <label for="id_title" class="form-label">Title</label>
+              <input type="text" class="form-control" name="title" id="id_title">
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-8 mb-3">
+              <label for="id_content" class="form-label">Content</label>
+              <textarea class="form-control" name="content" id="id_content" rows="5"></textarea>
+          </div>
+      </div>
+      <!-- Add other form fields as needed -->
 
-  <!-- <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="button" onclick="addIngredientField()">Add Ingredient</button>
-    <button type="submit">Submit</button>
+      <button type="submit" class="btn btn-primary">Submit</button>
   </form>
-
-<div id="ingredient-fields"></div>
-
-<script>
-function addIngredientField() {
-    var ingredientDiv = document.getElementById('ingredient-fields');
-    var newIngredientInput = document.createElement('input');
-    newIngredientInput.type = 'text';
-    newIngredientInput.name = 'ingredients';
-    ingredientDiv.appendChild(newIngredientInput);
-}
-</script> -->
-
- <form method="post" action="{% url 'recipe-submit' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit</button>
-  </form>
+</div>
 
 {% endblock %}
