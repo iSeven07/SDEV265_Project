@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<div class=container>
 <h1>{{ recipe.title }}</h1>
 <p>{{ recipe.content }}</p>
 <p>{{ recipe.author }}</p>
@@ -21,7 +21,7 @@
 {% else %}
     No ratings yet.
 {% endif %}
-
+</div>
 
 <!-- Display rating form here for authenticated users -->
 

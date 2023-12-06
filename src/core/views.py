@@ -99,6 +99,7 @@ def submit_recipe(request):
             new_recipe = form.save(commit=False)
             new_recipe.author = request.user  # Assuming you have user authentication
             new_recipe.save()
+            messages.success(request, 'Recipe submitted successfully!')
             return redirect('recipe-submit')   # Redirect to recipe detail page
             # removed , pk=new_recipe.pk from ('recipe-submit )
     else:

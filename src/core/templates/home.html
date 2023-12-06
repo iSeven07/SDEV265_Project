@@ -13,9 +13,9 @@
 
     <!-- Display Recent Recipes  -->
     <div class="container">
-
         <div class="row">
             {% for recipe in recipes %}
+
             {% comment %} <div style="border-style: dotted; padding-left: 10px; margin: 0 auto;">
             <h3>{{ post.title }}</h3>
             <p>Author: {{ post.author }}</p>
@@ -55,15 +55,9 @@
                 </div>
                 <div class="card-footer">
                     <p class="card-text">Posted by <a href="profile/{{recipe.author}}" class="link-dark">{{ recipe.author }}</a> on {{ recipe.date }}</p>
+
                 </div>
-            </div>
+            {% endfor %}
         </div>
-    {% endfor %}
     </div>
-</div>
-    <h1>{{ recipe.title }}</h1>
-    <p>{{ recipe.content }}</p>
-    <!-- Add more details as needed -->
-
-
 {% endblock content %}
