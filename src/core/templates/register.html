@@ -8,7 +8,7 @@
       {% endif %}
       <form method="post">
         {% csrf_token %}
-
+        <!-- Form allows user to create a username, register email, and create/confirm password -->
         <div class="mb-3 row">
           <label
             for="{{ form.username.id_for_label }}"

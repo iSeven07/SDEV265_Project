@@ -52,14 +52,6 @@ def home(request):
     return render(request, "home.html", {'recipes': recipes, 'title': 'Home'})
     # return HttpResponse('<h1>Recipe Home</h1>')
 
-# Search View
-"""
-def search(request):
-
-    return render(request, "search.html", {'title': 'Search'})
-    # return HttpResponse('<h1>Recipe Search</h1>')
-"""
-
 # Register View
 def register(request):
     message = ''
@@ -75,20 +67,6 @@ def register(request):
     else:
         form = SignupForm()
     return render(request, 'register.html', {'title': 'Register', 'form': form, 'message': message})
-    
-"""
- def submit_recipe(request):
-    if request.method == 'POST':
-        form = RecipeForm(request.POST)
-        if form.is_valid():
-            recipe = form.save(commit=False)
-            recipe.author = request.user
-            form.save()
-            return redirect('recipe-submit')  # Adjust the redirect as needed
-    else:
-        form = RecipeForm()
-    return render(request, 'recipe_submission.html', {'form': form})
-"""
 
 # Submit Recipe View
 def submit_recipe(request):

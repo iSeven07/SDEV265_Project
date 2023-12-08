@@ -4,9 +4,6 @@ from django.contrib.auth.models import User, AbstractUser
 from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-# Create your models here.
-
-
 
 # Recipes Model for DB
 class Recipes(models.Model):
@@ -32,16 +29,18 @@ class Profile(models.Model):
     avatar = models.ImageField(default='default.png', upload_to='profile_images')
     bio = models.TextField()
 
-    # # resizing images
-    # def save(self, *args, **kwargs):
-    #     super().save()
+    """
+    # commented out code that is no longer needed
+    def save(self, *args, **kwargs):
+         super().save()
 
-    #     img = Image.open(self.avatar.path)
+         img = Image.open(self.avatar.path)
 
-    #     if img.height > 100 or img.width > 100:
-    #         new_img = (100, 100)
-    #         img.thumbnail(new_img)
-    #         img.save(self.avatar.path)
+         if img.height > 100 or img.width > 100:
+             new_img = (100, 100)
+             img.thumbnail(new_img)
+             img.save(self.avatar.path)
+    """
 
     def __str__(self):
         return self.user.username
