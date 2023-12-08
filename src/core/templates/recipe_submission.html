@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 
 <div class="container mt-5">
@@ -26,19 +26,27 @@
           </div>
       </div>
       <!-- Add other form fields as needed -->
-      <div id="ingredients-formset">
+      {% comment %} <div id="ingredients-formset">
+        {{ formset.management_form }}
+        {% for form in formset %}
+            {{ form.as_table }}
+        {% endfor %}
+    </div> {% endcomment %}
+    <div id="ingredients-formset">
         {{ formset.management_form }}
         {% for form in formset %}
             {{ form.as_table }}
         {% endfor %}
     </div>
-    <button type="button" id="add-ingredient">Add Ingredient</button><br><br>
+    
+    <button type="button" id="add-ingredient">Add Ingredient</button>
+<br><br>
 
       <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 </div>
 
-
+<!-- The following script allows us to dynamically add additional ingredients to our recipe. -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const formsetPrefix = '{{ formset.prefix }}';
@@ -48,7 +56,7 @@
     
         addIngredientButton.addEventListener('click', function () {
             const newForm = document.createElement('div');
-            newForm.innerHTML = '{% escapejs formset.empty_form %}'.replace(/__prefix__/g, formsetIndex);
+            newForm.innerHTML = '{{ formset.empty_form|escapejs }}'.replace(/__prefix__/g, formsetIndex);
             ingredientsFormset.appendChild(newForm);
             formsetIndex++;
 
@@ -57,5 +65,9 @@
         });
     });
 </script>
+
+
+
+
 
 {% endblock %}

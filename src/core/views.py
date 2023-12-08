@@ -183,16 +183,16 @@ def submit_recipe(request):
         form = RecipeForm(request.POST)
         formset = IngredientFormSet(request.POST)
 
-        if form.is_valid() and formset.is_valid():
+        if form.is_valid():
             new_recipe = form.save(commit=False)
             new_recipe.author = request.user
             new_recipe.save()
 
-            formset.instance = new_recipe  # Set the formset instance to the new recipe
-            formset.save()  # Use the formset's save method to save the recipe and ingredients
+            if formset.is_valid():
+                formset.instance = new_recipe  
+                formset.save()  
 
-            messages.success(request, 'Recipe submitted successfully!')
-            return redirect('recipe_detail', recipe_id=new_recipe.pk)
+                return redirect('recipe_detail', recipe_id=new_recipe.pk)
 
     else:
         form = RecipeForm()
