@@ -6,6 +6,7 @@
   <!-- search.html -->
   {% for recipe in results %}
   <div>
+    <!-- Create hyperlink with recipe title -->
     <a href="{% url 'recipe_detail' recipe.id %}">{{ recipe.title }}</a>
     <!-- Display other recipe details -->
     <p>{{ recipe.content }}</p>
