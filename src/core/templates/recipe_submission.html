@@ -26,9 +26,36 @@
           </div>
       </div>
       <!-- Add other form fields as needed -->
+      <div id="ingredients-formset">
+        {{ formset.management_form }}
+        {% for form in formset %}
+            {{ form.as_table }}
+        {% endfor %}
+    </div>
+    <button type="button" id="add-ingredient">Add Ingredient</button><br><br>
 
       <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 </div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const formsetPrefix = '{{ formset.prefix }}';
+        const ingredientsFormset = document.getElementById('ingredients-formset');
+        const addIngredientButton = document.getElementById('add-ingredient');
+        let formsetIndex = {{ formset.total_form_count }};
+    
+        addIngredientButton.addEventListener('click', function () {
+            const newForm = document.createElement('div');
+            newForm.innerHTML = '{% escapejs formset.empty_form %}'.replace(/__prefix__/g, formsetIndex);
+            ingredientsFormset.appendChild(newForm);
+            formsetIndex++;
+
+            var formCount = document.querySelectorAll('[name^="recipeingredient_set-"]').length;
+            document.querySelector('[name="recipeingredient_set-TOTAL_FORMS"]').value = formCount;
+        });
+    });
+</script>
 
 {% endblock %}

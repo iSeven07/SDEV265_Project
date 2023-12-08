@@ -3,9 +3,16 @@
 {% block content %}
 <div class=container>
 <h1>{{ recipe.title }}</h1>
+<p><b>Description and Instructions:</b></p>
 <p>{{ recipe.content }}</p>
-<p>{{ recipe.author }}</p>
-<p>{{ recipe.date }}</p>
+<p><b>Ingredients:</b></p>
+<ul>
+    {% for ingredient in ingredients %}
+        <li>{{ ingredient.ingredient.name }} - {{ ingredient.quantity }}</li>
+    {% endfor %}
+</ul>
+
+<p><i>Created by {{ recipe.author }} on {{ recipe.date }}</i></p>
 
 <form method="post" action="{% url 'rate_recipe' recipe.id %}">
     {% csrf_token %}
@@ -21,6 +28,7 @@
 {% else %}
     No ratings yet.
 {% endif %}
+
 </div>
 
 <!-- Display rating form here for authenticated users -->
