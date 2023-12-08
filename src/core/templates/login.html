@@ -1,33 +1,33 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-4">
+      <h2>Login</h2>
+      <p>{{ message }}</p>
+      <form method="post">
+        {% csrf_token %}
 
-
-{% block content %}
-    <div class="container my-5">
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <h2>Login</h2>
-                <p>{{ message }}</p>
-                <form method="post">
-                    {% csrf_token %}
-
-                    <div class="mb-3 row">
-                        <label for="{{ form.username.id_for_label }}" class="col-sm-3 col-form-label">Username:</label>
-                        <div class="col-sm-9">
-                            {{ form.username }}
-                        </div>
-                    </div>
-
-                    <div class="mb-3 row">
-                        <label for="{{ form.password.id_for_label }}" class="col-sm-3 col-form-label">Password:</label>
-                        <div class="col-sm-9">
-                            {{ form.password }}
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-            </div>
+        <div class="mb-3 row">
+          <label
+            for="{{ form.username.id_for_label }}"
+            class="col-sm-3 col-form-label"
+            >Username:</label
+          >
+          <div class="col-sm-9">{{ form.username }}</div>
         </div>
-    </div>
-{% endblock content %}
 
+        <div class="mb-3 row">
+          <label
+            for="{{ form.password.id_for_label }}"
+            class="col-sm-3 col-form-label"
+            >Password:</label
+          >
+          <div class="col-sm-9">{{ form.password }}</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}
