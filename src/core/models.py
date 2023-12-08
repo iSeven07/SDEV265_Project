@@ -14,19 +14,23 @@ class Recipes(models.Model):
 
     def __str__(self):
         return self.title
-    
+
+
 # Rating system for recipe entries
 class Rating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     recipe = models.ForeignKey(Recipes, on_delete=models.CASCADE)
-    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
-    
+    rating = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+
+
 # Extending User Model
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     # Avatars will require pillow, which has been added to requirements.txt
-    avatar = models.ImageField(default='default.png', upload_to='profile_images')
+    avatar = models.ImageField(default="default.png", upload_to="profile_images")
     bio = models.TextField()
 
     """
