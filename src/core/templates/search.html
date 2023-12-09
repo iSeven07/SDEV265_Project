@@ -1,25 +1,20 @@
-{% extends 'base.html' %}
-{% block content %}
- <!-- 
-    <h1>Ready to Search?</h1>
-    <p>Search functionality is coming soon.</p>
- -->
- <div class=container>
+{% extends 'base.html' %} {% block content %}
 
- <h2>Search Results for "{{ query }}"</h2>
- 
- <!-- search.html -->
-{% for recipe in results %}
-<div>
+<div class="container">
+  <h2>Search Results for "{{ query }}"</h2>
+
+  <!-- search.html -->
+  {% for recipe in results %}
+  <div>
+    <!-- Create hyperlink with recipe title -->
     <a href="{% url 'recipe_detail' recipe.id %}">{{ recipe.title }}</a>
     <!-- Display other recipe details -->
     <p>{{ recipe.content }}</p>
     <!-- Additional fields as needed -->
-</div>
-{% empty %}
-<p>No results found.</p>
-{% endfor %}
+  </div>
+  {% empty %}
+  <p>No results found.</p>
+  {% endfor %}
 </div>
 
 {% endblock %}
-

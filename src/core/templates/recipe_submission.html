@@ -4,26 +4,26 @@
 
 <div class="container mt-5">
   <h2>Submit a Recipe</h2>
-  {% if messages %}
-      {% for message in messages %}
-          <div class="alert alert-success" role="alert">
-              {{ message }}
-          </div>
-      {% endfor %}
-  {% endif %}
+  {% if messages %} {% for message in messages %}
+  <div class="alert alert-success" role="alert">{{ message }}</div>
+  {% endfor %} {% endif %}
   <form method="post" action="{% url 'recipe-submit' %}" class="mt-4">
-      {% csrf_token %}
-      <div class="row">
-          <div class="col-md-6 mb-3">
-              <label for="id_title" class="form-label">Title</label>
-              <input type="text" class="form-control" name="title" id="id_title">
-          </div>
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="id_title" class="form-label">Title</label>
+        <input type="text" class="form-control" name="title" id="id_title" />
       </div>
-      <div class="row">
-          <div class="col-md-6 mb-3">
-              <label for="id_content" class="form-label">Content</label>
-              <textarea class="form-control" name="content" id="id_content" rows="5"></textarea>
-          </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="id_content" class="form-label">Content</label>
+        <textarea
+          class="form-control"
+          name="content"
+          id="id_content"
+          rows="5"
+        ></textarea>
       </div>
       <!-- Add other form fields as needed -->
       {% comment %} <div id="ingredients-formset">

@@ -1,15 +1,28 @@
-{% extends 'base.html' %}
-
-{% block content %}
-  <h2>{{ user_profile.user.username }}'s Profile</h2>
-  <p>Bio: {{ user_profile.bio }}</p>
-  {% if user_profile.avatar %}
-    <img class="img-rounded" style="max-width: 200px;" src="{{ user_profile.avatar.url }}" alt="Avatar">
-  {% endif %}
-
-{% if user_profile.user == request.user %}
-  <!-- Display edit button only for the current logged-in user's profile -->
-  <a href="{% url 'edit-profile' %}" class="btn btn-primary">Edit Profile</a>
+{% extends 'base.html' %} {% block content %}
+<h2>{{ user_profile.user.username }}'s Profile</h2>
+<p>Bio: {{ user_profile.bio }}</p>
+{% if user_profile.avatar %}
+<img
+  class="img-rounded"
+  style="max-width: 200px"
+  src="{{ user_profile.avatar.url }}"
+  alt="Avatar"
+/>
+{% endif %} {% if user_profile.user == request.user %}
+<!-- Display edit button only for the current logged-in user's profile -->
+<a href="{% url 'edit-profile' %}" class="btn btn-primary">Edit Profile</a>
 {% endif %}
 
-{% endblock %}
+<h3>Submitted Recipes:</h3>
+{% if user_recipes %}
+<ul>
+  {% for recipe in user_recipes %}
+  <li>
+    <a href="{% url 'recipe_detail' recipe.id %}">{{ recipe.title }}</a>
+    <!-- Add other details of the recipe as needed -->
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No recipes submitted yet.</p>
+{% endif %} {% endblock %}
