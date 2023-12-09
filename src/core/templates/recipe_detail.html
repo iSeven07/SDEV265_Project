@@ -2,7 +2,7 @@
 <div class="container">
   <h1>{{ recipe.title }}</h1>
   <p>{{ recipe.content }}</p>
-  <p>{{ recipe.author }}</p>
+  <p><a href="{% url 'user-profile' recipe.author.username %}">{{ recipe.author }}</a></p>
   <p>{{ recipe.date }}</p>
 
   <form method="post" action="{% url 'rate_recipe' recipe.id %}">

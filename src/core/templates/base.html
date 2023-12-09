@@ -47,7 +47,10 @@
                         <a class="nav-link" href='{% url 'recipe-submit' %}'>Submit a Recipe</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href='{% url 'logout' %}'>Logout</a>
+                        <a class="nav-link" href="{% url 'user-profile' user.username %}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                     </li>
                     {% endif %}
                     {% if user.is_authenticated and user.is_staff %}
