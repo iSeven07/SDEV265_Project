@@ -3,49 +3,40 @@
 {% block content %}
 
 <div class="container mt-5">
-  <h2>Submit a Recipe</h2>
+  <h2 class="text-center">Submit a Recipe</h2>
   {% if messages %} {% for message in messages %}
   <div class="alert alert-success" role="alert">{{ message }}</div>
   {% endfor %} {% endif %}
   <form method="post" action="{% url 'recipe-submit' %}" class="mt-4">
     {% csrf_token %}
-    <div class="row">
+    <div class="row justify-content-center">
       <div class="col-md-6 mb-3">
-        <label for="id_title" class="form-label">Title</label>
+        <label for="id_title" class="form-label">Recipe Name</label>
         <input type="text" class="form-control" name="title" id="id_title" />
       </div>
     </div>
-    <div class="row">
+    <div class="row justify-content-center">
       <div class="col-md-6 mb-3">
-        <label for="id_content" class="form-label">Content</label>
-        <textarea
-          class="form-control"
-          name="content"
-          id="id_content"
-          rows="5"
-        ></textarea>
+        <label for="id_content" class="form-label">Description/Instructions</label>
+        <textarea class="form-control" name="content" id="id_content" rows="5"></textarea>
       </div>
-      <!-- Add other form fields as needed -->
-      {% comment %} <div id="ingredients-formset">
-        {{ formset.management_form }}
-        {% for form in formset %}
-            {{ form.as_table }}
-        {% endfor %}
-    </div> {% endcomment %}
-    <div id="ingredients-formset">
-        {{ formset.management_form }}
-        {% for form in formset %}
-            {{ form.as_table }}
-        {% endfor %}
     </div>
-    <div class="col-md-6 mb-3 mt-3">
-      <button type="button" id="add-ingredient" class="btn btn-secondary">Add Ingredient</button>
-  </div>
-    <div class="row">
-      <div class="col-md-6 mb-3">
-          <button type="submit" class="btn btn-primary">Submit</button>
+    <div id="ingredients-formset" class="text-center mb-3">
+      {{ formset.management_form }}
+      {% for form in formset %}
+        {{ form.as_table }}
+      {% endfor %}
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-6 text-center mb-3">
+        <button type="button" id="add-ingredient" class="btn btn-secondary">Add Ingredient</button>
       </div>
-  </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-6 text-center">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
   </form>
 </div>
 
@@ -68,9 +59,6 @@
         });
     });
 </script>
-
-
-
 
 
 {% endblock %}
