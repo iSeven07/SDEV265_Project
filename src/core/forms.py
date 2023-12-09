@@ -16,9 +16,9 @@ class SignupForm(UserCreationForm):
 # Recipe submission form
 class RecipeForm(forms.ModelForm):
     class Meta:
-        model = Recipes
+        model = Recipe
         fields = ['title', 'content', 'ingredients']
-"""
+
 # class IngredientForm(forms.ModelForm):
 #     ingredient = forms.CharField(max_length=63)
 #     quantity = forms.DecimalField(required=True)

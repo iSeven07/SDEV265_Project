@@ -227,7 +227,7 @@ def logout_user(request):
 # User Profile View
 def user_profile(request, username):
     user_profile = get_object_or_404(Profile, user__username=username)
-    user_recipes = Recipes.objects.filter(author=user_profile.user)
+    user_recipes = Recipe.objects.filter(author=user_profile.user)
     return render(request, "profile.html", {"user_profile": user_profile, "user_recipes": user_recipes})
 
 

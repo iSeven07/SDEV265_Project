@@ -19,6 +19,7 @@ class Recipe(models.Model):
     content = models.TextField()
     date = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    ingredients = models.ManyToManyField(Ingredient, through='RecipeIngredient')
 
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
