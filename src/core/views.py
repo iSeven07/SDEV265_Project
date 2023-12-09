@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.http import HttpResponse
 from django.contrib.auth import login, logout, authenticate
-from .models import Recipes, Profile, Rating
-from .forms import SignupForm, RecipeForm, LoginForm, UpdateUserForm, UpdateProfileForm
+from .models import Recipe, Profile, Rating, Ingredient
+from .forms import SignupForm, RecipeForm, LoginForm, UpdateUserForm, UpdateProfileForm, IngredientFormSet
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
@@ -32,8 +32,8 @@ posts = [
 # Home View
 def home(request):
     # Recipe Ratings for each Recipe
-    recipes = Recipes.objects.annotate(
-        avg_rating=Round(Avg("rating__rating"), 1),
+    recipes = Recipe.objects.annotate(
+        avg_rating=Round(Avg('rating__rating'), 1),
         has_ratings=Case(
             When(rating__isnull=True, then=Value(False)),
             default=Value(True),
@@ -82,22 +82,114 @@ def register(request):
 
 
 # Submit Recipe View
+# def submit_recipe(request):
+#     if request.method == 'POST':
+#         form = RecipeForm(request.POST)
+#         formset = IngredientFormSet(request.POST, instace=Recipes())
+
+#         if form.is_valid() and formset.is_valid:
+#             # Save the form data to the database
+#             new_recipe = form.save(commit=False)
+#             new_recipe.author = request.user  # Assuming you have user authentication
+#             new_recipe.save()
+
+#             for form in formset:
+#                 ingredient = form.cleaned_data.get('ingredient')
+#                 quantity = form.cleaned_data.get('quantity')
+#                 if ingredient and quantity:
+#                     new_recipe.ingredients.add(ingredient, through_defaults={'quantity': quantity})
+
+#             messages.success(request, 'Recipe submitted successfully!')
+#             return redirect('recipe-submit')   # Redirect to recipe detail page
+#             # removed , pk=new_recipe.pk from ('recipe-submit )
+#     else:
+#         form = RecipeForm()
+#         formset = IngredientFormSet(instance=Recipes())
+
+#     return render(request, 'recipe_submission.html', {'form': form, 'formset': formset})
+
+# def submit_recipe(request):
+#     if request.method == 'POST':
+#         form = RecipeForm(request.POST)
+#         formset = IngredientFormSet(request.POST, instance=Recipes())
+
+#         if form.is_valid() and formset.is_valid():
+#             # Save the form data to the database
+#             new_recipe = form.save(commit=False)
+#             new_recipe.author = request.user  # Assuming you have user authentication
+#             new_recipe.save()
+
+#             for form in formset:
+#                 ingredient = form.cleaned_data.get('ingredient')
+#                 quantity = form.cleaned_data.get('quantity')
+#                 if ingredient and quantity:
+#                     recipe_ingredient = form.save(commit=False)
+#                     recipe_ingredient.recipe = new_recipe
+#                     recipe_ingredient.save()
+
+#             messages.success(request, 'Recipe submitted successfully!')
+#             # return redirect('recipe-detail', pk=new_recipe.pk)  # Redirect to recipe detail page
+#             return redirect(f'/recipe/{new_recipe.pk}/')
+
+#     else:
+#         form = RecipeForm()
+#         formset = IngredientFormSet(instance=Recipes())
+
+#     return render(request, 'recipe_submission.html', {'form': form, 'formset': formset})
+
+# def submit_recipe(request):
+#     if request.method == 'POST':
+#         form = RecipeForm(request.POST)
+#         formset = IngredientFormSet(request.POST, instance=new_recipe)
+#         print("Made it to right before checking if form is valid...")
+#         if form.is_valid() and formset.is_valid():
+#             new_recipe = form.save(commit=False)
+#             new_recipe.author = request.user
+#             new_recipe.save()
+
+#             print("Made it before the for form in formset")
+#             for form in formset:
+#                 ingredient_name = form.cleaned_data.get('ingredient')
+#                 quantity = form.cleaned_data.get('quantity')
+
+#                 print(f'Type of ingredient: {type(ingredient)}')
+#                 # Create or get the Ingredient instance
+#                 ingredient = Ingredient.objects.get_or_create(name=ingredient_name)
+
+#                 # Create the RecipeIngredient instance and set the ingredient field
+#                 recipe_ingredient = RecipeIngredient(recipe=new_recipe, ingredient=ingredient, quantity=quantity)
+#                 recipe_ingredient.save()
+
+#             messages.success(request, 'Recipe submitted successfully!')
+#             return redirect('recipe_detail', recipe_id=new_recipe.pk)
+
+#     else:
+#         form = RecipeForm()
+#         formset = IngredientFormSet(instance=Recipes())
+
+#     return render(request, 'recipe_submission.html', {'form': form, 'formset': formset})
+
 def submit_recipe(request):
     if request.method == "POST":
         form = RecipeForm(request.POST)
+        formset = IngredientFormSet(request.POST)
+
         if form.is_valid():
-            # Save the form data to the database
             new_recipe = form.save(commit=False)
-            new_recipe.author = request.user  # Assuming you have user authentication
+            new_recipe.author = request.user
             new_recipe.save()
-            messages.success(request, "Recipe submitted successfully!")
-            return redirect("recipe-submit")  # Redirect to recipe detail page
-            # removed , pk=new_recipe.pk from ('recipe-submit )
+
+            if formset.is_valid():
+                formset.instance = new_recipe  
+                formset.save()  
+
+                return redirect('recipe_detail', recipe_id=new_recipe.pk)
+
     else:
         form = RecipeForm()
+        formset = IngredientFormSet()
 
-    return render(request, "recipe_submission.html", {"form": form})
-
+    return render(request, 'recipe_submission.html', {'form': form, 'formset': formset})
 
 # Login Page View
 def login_page(request):
@@ -178,7 +270,7 @@ def search_bar(request):
     if query:
         # Normalize query and content to lower case for case-insensitive search
         query = query.strip()
-        results = Recipes.objects.filter(content__icontains=query)
+        results = Recipe.objects.filter(content__icontains=query)
     else:
         results = None
 
@@ -187,24 +279,21 @@ def search_bar(request):
 
 # Recipe Detail View
 def recipe_detail(request, recipe_id):
-    recipe = Recipes.objects.get(pk=recipe_id)
+    recipe = Recipe.objects.get(pk=recipe_id)
+    ingredients = recipe.recipeingredient_set.all()
     ratings = Rating.objects.filter(recipe=recipe)
     average_rating = ratings.aggregate(avg_rating=Avg("rating"))["avg_rating"]
 
-    return render(
-        request,
-        "recipe_detail.html",
-        {"recipe": recipe, "average_rating": average_rating},
-    )
+    return render(request, 'recipe_detail.html', {'recipe': recipe, 'average_rating': average_rating, 'ingredients': ingredients})
 
 
 # Rating Submission requires login
 @login_required(login_url="/login/")
 def rate_recipe(request, recipe_id):
-    if request.method == "POST":
-        recipe = get_object_or_404(Recipes, pk=recipe_id)
-        user_rating = int(request.POST.get("rating"))
-
+    if request.method == 'POST':
+        recipe = get_object_or_404(Recipe, pk=recipe_id)
+        user_rating = int(request.POST.get('rating'))
+        
         Rating.objects.create(user=request.user, recipe=recipe, rating=user_rating)
 
     return redirect("recipe_detail", recipe_id=recipe_id)

@@ -1,9 +1,18 @@
-{% extends 'base.html' %} {% block content %}
-<div class="container">
-  <h1>{{ recipe.title }}</h1>
-  <p>{{ recipe.content }}</p>
-  <p><a href="{% url 'user-profile' recipe.author.username %}">{{ recipe.author }}</a></p>
-  <p>{{ recipe.date }}</p>
+{% extends 'base.html' %}
+
+{% block content %}
+<div class=container>
+<h1>{{ recipe.title }}</h1>
+<p><b>Description and Instructions:</b></p>
+<p>{{ recipe.content }}</p>
+<p><b>Ingredients:</b></p>
+<ul>
+    {% for ingredient in ingredients %}
+        <li>{{ ingredient.ingredient.name }} - {{ ingredient.quantity }}</li>
+    {% endfor %}
+</ul>
+
+<p><i>Created by {{ recipe.author }} on {{ recipe.date }}</i></p>
 
   <form method="post" action="{% url 'rate_recipe' recipe.id %}">
     {% csrf_token %}
@@ -14,8 +23,12 @@
 
   <p>Total Ratings: {{ recipe.rating_set.count }}</p>
 
-  {% if average_rating %} Average Rating: {{ average_rating|floatformat:1 }} {%
-  else %} No ratings yet. {% endif %}
+{% if average_rating %}
+    Average Rating: {{ average_rating|floatformat:1 }}
+{% else %}
+    No ratings yet.
+{% endif %}
+
 </div>
 
 <!-- Display rating form here for authenticated users -->
