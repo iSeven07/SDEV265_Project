@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
-from django.db.models import Avg, Value, F, Case, When, BooleanField
+from django.db.models import Avg, Value, Q, Case, When, BooleanField
 from django.db.models.functions import Round
 
 # Dummy Data
@@ -268,9 +268,15 @@ def search_bar(request):
     query = request.GET.get("query")
 
     if query:
-        # Normalize query and content to lower case for case-insensitive search
-        query = query.strip()
-        results = Recipe.objects.filter(content__icontains=query)
+        # Normalize query to lower case for case-insensitive search
+        query = query.lower().strip()
+        
+        # Use Q objects for searching across multiple fields
+        results = Recipe.objects.filter(
+            Q(title__icontains=query) |  # Match in recipe title
+            Q(content__icontains=query) |  # Match in recipe content
+            Q(ingredients__name__icontains=query)  # Match in ingredient names
+        ).distinct()  # Ensure distinct results
     else:
         results = None
 
