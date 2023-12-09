@@ -65,6 +65,16 @@
         <div class="card-footer">
           <p class="card-text">
             Posted by
+
+            {% if recipe.author.profile.avatar %}
+            <img
+              class="img-rounded"
+              style="max-width: 20px"
+              src="{{ recipe.author.profile.avatar.url }}"
+              alt="Avatar"
+            />
+            {% endif %}
+
             <a href="profile/{{recipe.author}}" class="link-dark"
               >{{ recipe.author }}</a
             >
