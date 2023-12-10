@@ -4,7 +4,7 @@ body::before {
     height: 60px;
 }
 body {
-    background-color: white;
+    background-color:#ebe6da;
     color: #343a40;
 }
 
@@ -31,13 +31,14 @@ body {
 
 .navbar .btn-outline-success {
     color: white; 
+    border-color: #b1b1b1;
     background-color: #343a40;
 }
 
 .navbar .btn-outline-success:hover {
-    color: #343a40; 
+    color: white; 
     border-color: #343a40; 
-    background-color: #fd7e14
+    background-color: #7e7d7d
 }
 
 footer {
@@ -47,4 +48,19 @@ footer {
 .custom-bg-light-orange {
     background-color: #fd7e14;
     color: white;
+}
+.star-rating {
+    color: gold;
+    font-size: 30px;
+    display: inline-block;
+}
+
+.star-rating .star {
+    display: inline-block;
+    margin: 0 -2px;  /* Adjust the margin to prevent a gap between stars */
+    filter: drop-shadow(1px 1px 1px black); /* Add this line for a drop shadow */
+}
+
+#ingredients-formset input[name*='quantity'] {
+    width: 3%; /* Adjust the width as needed */
 }
