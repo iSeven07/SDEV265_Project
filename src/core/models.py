@@ -20,7 +20,8 @@ class Ingredient(models.Model):
 # Recipes Model for DB
 class Recipe(models.Model):
     title = models.CharField(max_length=200)
-    content = models.TextField()
+    content = models.TextField(blank=False, default='')
+    instructions = models.TextField(blank=False, default='')
     date = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     ingredients = models.ManyToManyField(Ingredient, through='RecipeIngredient')

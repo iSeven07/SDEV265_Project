@@ -19,7 +19,6 @@
   {% for recipe in user_recipes %}
   <li>
     <a href="{% url 'recipe_detail' recipe.id %}">{{ recipe.title }}</a>
-    <!-- Add other details of the recipe as needed -->
   </li>
   {% endfor %}
 </ul>

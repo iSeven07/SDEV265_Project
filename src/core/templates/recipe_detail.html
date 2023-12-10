@@ -4,12 +4,6 @@
 <div class=container>
 <h1>{{ recipe.title }}</h1>
 
-{% comment %} {% if average_rating %}
-  <p>Average Rating:  {{ average_rating|floatformat:1 }} {{ full_stars }}{{ empty_stars }}</p>
-{% else %}
-  <p>No ratings yet.</p>
-{% endif %} {% endcomment %}
-
 {% if average_rating %}
 <p class="rate-detail">
   <span style="color: black; font-size: 18px">
@@ -25,11 +19,18 @@
 <p>No Ratings</p>
 {% endif %}
 
-<p><b>Description and Instructions:</b></p>
-<div class="recipe-content">
-  <p>{{ recipe.content|linebreaksbr }}</p>
+<div style="margin-bottom: 25px;" class="recipe-content">
+  <p style="margin-bottom: 0px;"><b>Description</b></p>
+  <p style="margin-top: 0px;">{{ recipe.content|linebreaksbr }}</p>
 </div>
-<p><b>Ingredients:</b></p>
+
+<div style="margin-bottom: 25px;" class="recipe-content">
+  <p style="margin-bottom: 0px;"><b>Instructions:</b></p>
+  <p style="margin-top: 0px;">{{ recipe.instructions|linebreaksbr }}</p>
+</div>
+
+<div  style="margin-bottom: 25px;" class="recipe-content">
+<p style="margin-bottom: 0px;"><b>Ingredients:</b></p>
 <ul>
     {% for ingredient in ingredients %}
         <li>
@@ -40,7 +41,9 @@
         </li>
     {% endfor %}
 </ul>
+</div>
 
+<div style="margin-bottom: 25px;">
 <div style="padding-bottom: 0px; margin: 0px;">
   <b>Nutrition Information</b>
       <p style="font-size: 12px; margin-bottom: 0px;"><span style="font-weight: bold; color:red">Note</span>: Nutritional data could be missing or inaccurate due to Edamam API</p>
@@ -54,6 +57,7 @@
     <li><b>Total Carbohydrates</b>: {{ total_nutrition.total_carbohydrates }} g</li>
     </ul>
   </div>
+</div>
 
   <div style="margin-top: 10px;">
     <p><i>Created by {{ recipe.author }} on {{ recipe.date }}</i></p>
@@ -85,7 +89,7 @@
   
   <p>Total Ratings: {{ recipe.rating_set.count }}</p>
 
-<div class="print">
+<div style="margin-top: 25px;" class="print">
 <button class="btn btn-info" onclick="printRecipe()">Print Recipe</button>
 </div>
 </div>

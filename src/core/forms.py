@@ -20,19 +20,6 @@ class RecipeForm(forms.ModelForm):
         model = Recipe
         fields = ['title', 'content', 'ingredients']
 
-# class IngredientForm(forms.ModelForm):
-#     ingredient = forms.CharField(max_length=63)
-#     quantity = forms.DecimalField(required=True)
-
-#     class Meta:
-#         model = RecipeIngredient
-#         fields = ['ingredient', 'quantity']
-#         widgets = {
-#             'ingredient': forms.TextInput(attrs={'placeholder': 'Enter ingredient name'}),
-#         }
-
-# IngredientFormSet = inlineformset_factory(Recipes, RecipeIngredient, form=IngredientForm, extra=1)
-
 class IngredientForm(forms.ModelForm):
     class Meta:
         model = RecipeIngredient
@@ -43,13 +30,6 @@ class IngredientForm(forms.ModelForm):
 
     ingredient = forms.CharField(max_length=100, required=False)
     quantity = forms.DecimalField(max_digits=5, decimal_places=2)
-
-    # def clean_ingredient(self):
-    #     ingredient_name = self.cleaned_data['ingredient']
-    #     if not ingredient_name:
-    #         return None  # Handle the case when the field is empty
-    #     ingredient, created = Ingredient.objects.get_or_create(name=ingredient_name, defaults={'calories': 0})
-    #     return ingredient
 
     def clean_ingredient(self):
         ingredient_name = self.cleaned_data['ingredient']
@@ -82,7 +62,7 @@ class RecipeForm(forms.ModelForm):
 
     class Meta:
         model = Recipe
-        fields = ['title', 'content']  # These are the fields you want to include in the form
+        fields = ['title', 'content', 'instructions']  # These are the fields you want to include in the form
 
 
 # Login form
