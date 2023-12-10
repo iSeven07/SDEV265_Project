@@ -297,7 +297,20 @@ def recipe_detail(request, recipe_id):
     average_rating = ratings.aggregate(avg_rating=Avg("rating"))["avg_rating"]
     total_nutrition = recipe.calculate_total_nutrition()
 
-    return render(request, 'recipe_detail.html', {'recipe': recipe, 'average_rating': average_rating, 'ingredients': ingredients, 'total_nutrition': total_nutrition})
+    # Calculate stars
+    if average_rating:
+        full_stars = range(int(average_rating))
+        empty_stars = range(5 - int(average_rating))
+    else:
+        full_stars = 0
+        empty_stars = 5
+
+    return render(request, 'recipe_detail.html', {'recipe': recipe, 
+                                                  'average_rating': average_rating, 
+                                                  'ingredients': ingredients, 
+                                                  'total_nutrition': total_nutrition,
+                                                  'full_stars': full_stars,
+                                                  'empty_stars': empty_stars})
 
 
 # Rating Submission requires login

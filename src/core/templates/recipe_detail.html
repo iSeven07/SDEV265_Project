@@ -3,6 +3,28 @@
 {% block content %}
 <div class=container>
 <h1>{{ recipe.title }}</h1>
+
+{% comment %} {% if average_rating %}
+  <p>Average Rating:  {{ average_rating|floatformat:1 }} {{ full_stars }}{{ empty_stars }}</p>
+{% else %}
+  <p>No ratings yet.</p>
+{% endif %} {% endcomment %}
+
+{% if average_rating %}
+<p class="rate-detail">
+  <span style="color: black; font-size: 18px">
+    Rating: {{ average_rating }}
+    </span>
+  {% for _ in full_stars %}
+  <span class="star">★</span>
+  {% endfor %} {% for _ in empty_stars %}
+  <span class="star">☆</span>
+  {% endfor %}
+</p>
+{% else %}
+<p>No Ratings</p>
+{% endif %}
+
 <p><b>Description and Instructions:</b></p>
 <div class="recipe-content">
   <p>{{ recipe.content|linebreaksbr }}</p>
@@ -38,26 +60,49 @@
   </div>
 
   {% if user.is_authenticated %}
-  <form method="post" action="{% url 'rate_recipe' recipe.id %}">
-    {% csrf_token %}
-    <label for="rating">Rate this recipe:</label>
-    <input type="number" id="rating" name="rating" min="1" max="5" />
-    <button type="submit" class="btn btn-primary">Submit Rating</button>
-  </form>
+  <div class="rate-recipe">
+    <form method="post" action="{% url 'rate_recipe' recipe.id %}" onsubmit="return validateRating()"> 
+      {% csrf_token %}
+      <label for="rating"><b>Rate this recipe</b>:</label>
+      <div class="row align-items-center mx-0 mt-2 mb-2">
+          <div class="col-1 mx-0"> <!-- Adjust the column width as needed -->
+              <select class="form-control form-control-sm mx-0" id="rating" name="rating" type="number">
+                  <option value="" disabled selected>↓ Select ↓</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+              </select>
+          </div>
+          <div class="col mx-0">
+              <button style="margin-left: 10px;" type="submit" class="btn btn-primary btn-sm mx-0">Submit Rating</button>
+          </div>
+      </div>
+  </form> 
+</div>
   {% endif %}
   
   <p>Total Ratings: {{ recipe.rating_set.count }}</p>
 
-{% if average_rating %}
-    Average Rating: {{ average_rating|floatformat:1 }}
-{% else %}
-    No ratings yet.
-{% endif %}
-
+<div class="print">
+<button class="btn btn-info" onclick="printRecipe()">Print Recipe</button>
+</div>
 </div>
 
-<!-- Display rating form here for authenticated users -->
-
-<!-- Display existing ratings with stars -->
+<script>
+  function printRecipe() {
+    window.print();
+  }
+  
+  function validateRating() {
+    var rating = document.getElementById("rating").value;
+    if (rating === "") {
+        alert("Please select a rating.");
+        return false;
+    }
+    return true;
+  }
+  </script>
 
 {% endblock content %}

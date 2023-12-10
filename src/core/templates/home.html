@@ -47,7 +47,8 @@
           <p>Rating: {{ recipe.avg_rating }}</p>
           {% else %}
           <p>No Ratings</p>
-          {% endif %} {% endcomment %} {% if recipe.has_ratings %}
+          {% endif %} {% endcomment %} 
+          {% if recipe.has_ratings %}
           <p class="star-rating">
             <span style="color: black; font-size: 20px"
               >{{ recipe.avg_rating }}</span
