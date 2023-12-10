@@ -60,3 +60,15 @@ footer {
     margin: 0 -2px;  /* Adjust the margin to prevent a gap between stars */
     filter: drop-shadow(1px 1px 1px black); /* Add this line for a drop shadow */
 }
+
+.recipe-content {
+    white-space: pre-line;
+}
+
+.nutrition-info p {
+    margin-bottom: 2px;
+}
+
+.nutrition-info ul, ol {
+    list-style-type: none;
+}

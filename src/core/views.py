@@ -295,8 +295,9 @@ def recipe_detail(request, recipe_id):
     ingredients = recipe.recipeingredient_set.all()
     ratings = Rating.objects.filter(recipe=recipe)
     average_rating = ratings.aggregate(avg_rating=Avg("rating"))["avg_rating"]
+    total_nutrition = recipe.calculate_total_nutrition()
 
-    return render(request, 'recipe_detail.html', {'recipe': recipe, 'average_rating': average_rating, 'ingredients': ingredients})
+    return render(request, 'recipe_detail.html', {'recipe': recipe, 'average_rating': average_rating, 'ingredients': ingredients, 'total_nutrition': total_nutrition})
 
 
 # Rating Submission requires login
