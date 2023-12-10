@@ -49,6 +49,24 @@ footer {
     background-color: #fd7e14;
     color: white;
 }
+
+.rate-detail {
+    color: gold;
+    font-size: 25px;
+    display: inline-block;
+}
+
+.rate-detail .star {
+    display: inline-block;
+    margin: 0 -2px;  /* Adjust the margin to prevent a gap between stars */
+    filter: drop-shadow(1px 1px 1px black); /* Add this line for a drop shadow */
+}
+
+.rate-detail p {
+    margin: 0px;
+    padding: 0px;
+}
+
 .star-rating {
     color: gold;
     font-size: 30px;
@@ -57,12 +75,13 @@ footer {
 
 .star-rating .star {
     display: inline-block;
-    margin: 0 -2px;  /* Adjust the margin to prevent a gap between stars */
-    filter: drop-shadow(1px 1px 1px black); /* Add this line for a drop shadow */
+    margin: 0 -2px; 
+    filter: drop-shadow(1px 1px 1px black);
 }
 
+
 #ingredients-formset input[name*='quantity'] {
-    width: 3%; /* Adjust the width as needed */
+    width: 3%; 
 }
 
 .nav-link.active {
@@ -70,7 +89,7 @@ footer {
 }
 
 .recipe-content {
-    white-space: pre-line;
+    white-space: normal;
 }
 
 .nutrition-info p {
@@ -80,3 +99,30 @@ footer {
 .nutrition-info ul, ol {
     list-style-type: none;
 }
+
+.print {
+    margin-top: 15px;
+}
+
+@media print {
+    body {
+      color: black;
+      background-color: white;
+    }
+  
+    .rate-recipe {
+        display: none;
+      }
+
+    .navbar {
+        display: none;
+    }
+
+    .print {
+        display: none;
+    }
+
+    footer {
+        display: none;
+    }
+  }

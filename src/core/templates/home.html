@@ -20,14 +20,7 @@
 <!-- Display Recent Recipes  -->
 <div class="container">
   <div class="row">
-    {% for recipe in recipes %} {% comment %}
-    <div style="border-style: dotted; padding-left: 10px; margin: 0 auto">
-      <h3>{{ post.title }}</h3>
-      <p>Author: {{ post.author }}</p>
-      <p>{{ post.content }}</p>
-      <p style="font-style: italic">Posted on {{ post.date }}</p>
-    </div>
-    {% endcomment %}
+    {% for recipe in recipes %} 
 
     <div class="col-12 col-md-4 mb-4">
       <div class="card d-flex flex-column h-100">
@@ -43,11 +36,7 @@
           <h5 class="card-title">{{ recipe.content }}</h5>
           <br />
 
-          {% comment %} {% if recipe.has_ratings %}
-          <p>Rating: {{ recipe.avg_rating }}</p>
-          {% else %}
-          <p>No Ratings</p>
-          {% endif %} {% endcomment %} {% if recipe.has_ratings %}
+          {% if recipe.has_ratings %}
           <p class="star-rating">
             <span style="color: black; font-size: 20px"
               >{{ recipe.avg_rating }}</span
@@ -88,6 +77,5 @@
 </div>
 <h1>{{ recipe.title }}</h1>
 <p>{{ recipe.content }}</p>
-<!-- Add more details as needed -->
 
 {% endblock content %}
