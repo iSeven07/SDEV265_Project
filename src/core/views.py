@@ -11,6 +11,7 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Avg, Value, Q, Case, When, BooleanField
 from django.db.models.functions import Round
+from django.core.exceptions import ValidationError
 
 # Dummy Data
 posts = [
@@ -174,16 +175,21 @@ def submit_recipe(request):
         form = RecipeForm(request.POST)
         formset = IngredientFormSet(request.POST)
 
-        if form.is_valid():
-            new_recipe = form.save(commit=False)
-            new_recipe.author = request.user
-            new_recipe.save()
+        if form.is_valid() and formset.is_valid():
+        # Check if at least one ingredient has been provided
+            if any(form.cleaned_data.get('ingredient') for form in formset):
+                new_recipe = form.save(commit=False)
+                new_recipe.author = request.user
+                new_recipe.save()
 
-            if formset.is_valid():
-                formset.instance = new_recipe  
-                formset.save()  
+                formset.instance = new_recipe
+                formset.save()
 
                 return redirect('recipe_detail', recipe_id=new_recipe.pk)
+            else:
+                # Add an error message if no ingredients are provided
+                messages.error(request, 'At least one ingredient is required.', extra_tags="alert alert-danger")
+                return render(request, 'recipe_submission.html', {'form': form, 'formset': formset})
 
     else:
         form = RecipeForm()
