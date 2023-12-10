@@ -3,6 +3,7 @@ from django.forms import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Recipe, Profile, RecipeIngredient, Ingredient
+from .utils import fetch_nutrition_data
 
 # User registration form
 class SignupForm(UserCreationForm):
@@ -41,13 +42,39 @@ class IngredientForm(forms.ModelForm):
         }
 
     ingredient = forms.CharField(max_length=100, required=False)
+    quantity = forms.DecimalField(max_digits=5, decimal_places=2)
+
+    # def clean_ingredient(self):
+    #     ingredient_name = self.cleaned_data['ingredient']
+    #     if not ingredient_name:
+    #         return None  # Handle the case when the field is empty
+    #     ingredient, created = Ingredient.objects.get_or_create(name=ingredient_name, defaults={'calories': 0})
+    #     return ingredient
 
     def clean_ingredient(self):
         ingredient_name = self.cleaned_data['ingredient']
         if not ingredient_name:
             return None  # Handle the case when the field is empty
-        ingredient, created = Ingredient.objects.get_or_create(name=ingredient_name, defaults={'calories': 0})
-        return ingredient
+
+        nutrition_data = fetch_nutrition_data(ingredient_name)
+        if nutrition_data:
+            ingredient, created = Ingredient.objects.get_or_create(
+                name=ingredient_name,
+                defaults={
+                    'calories': nutrition_data['calories'],
+                    'protein': nutrition_data['protein'],
+                    'fat': nutrition_data['fat'],
+                    'carbohydrates': nutrition_data['carbs'],
+                }
+            )
+            return ingredient
+        else:
+            # If nutrition data is not available, create the Ingredient object with default values
+            ingredient, created = Ingredient.objects.get_or_create(
+                name=ingredient_name,
+                defaults={'calories': 0, 'protein': 0, 'fat': 0, 'carbohydrates': 0}
+            )
+            return ingredient
 
 IngredientFormSet = inlineformset_factory(Recipe, RecipeIngredient, form=IngredientForm, extra=1)
 

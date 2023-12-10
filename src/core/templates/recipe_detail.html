@@ -4,23 +4,48 @@
 <div class=container>
 <h1>{{ recipe.title }}</h1>
 <p><b>Description and Instructions:</b></p>
-<p>{{ recipe.content }}</p>
+<div class="recipe-content">
+  <p>{{ recipe.content|linebreaksbr }}</p>
+</div>
 <p><b>Ingredients:</b></p>
 <ul>
     {% for ingredient in ingredients %}
-        <li>{{ ingredient.ingredient.name }} - {{ ingredient.quantity }}</li>
+        <li>
+          {{ ingredient.ingredient.name }} - {{ ingredient.quantity }}
+          {% if ingredient.ingredient.calories == 0 and ingredient.ingredient.protein == 0 and ingredient.ingredient.fat == 0 and ingredient.ingredient.carbohydrates == 0 %}
+            <span style="font-size: 10px; color: red;">This ingredient has no nutrition data available.</span>
+          {% endif %}
+        </li>
     {% endfor %}
 </ul>
 
-<p><i>Created by {{ recipe.author }} on {{ recipe.date }}</i></p>
+<div style="padding-bottom: 0px; margin: 0px;">
+  <b>Nutrition Information</b>
+      <p style="font-size: 12px; margin-bottom: 0px;"><span style="font-weight: bold; color:red">Note</span>: Nutritional data could be missing or inaccurate due to Edamam API</p>
+</div>
 
+  <div class="nutrition-info">
+    <ul>
+    <li><b>Total Calories</b>: {{ total_nutrition.total_calories }} kcal</p></li>
+    <li><b>Total Protein</b>: {{ total_nutrition.total_protein }} g</li>
+    <li><b>Total Fat</b>: {{ total_nutrition.total_fat }} g</li>
+    <li><b>Total Carbohydrates</b>: {{ total_nutrition.total_carbohydrates }} g</li>
+    </ul>
+  </div>
+
+  <div style="margin-top: 10px;">
+    <p><i>Created by {{ recipe.author }} on {{ recipe.date }}</i></p>
+  </div>
+
+  {% if user.is_authenticated %}
   <form method="post" action="{% url 'rate_recipe' recipe.id %}">
     {% csrf_token %}
     <label for="rating">Rate this recipe:</label>
     <input type="number" id="rating" name="rating" min="1" max="5" />
     <button type="submit" class="btn btn-primary">Submit Rating</button>
   </form>
-
+  {% endif %}
+  
   <p>Total Ratings: {{ recipe.rating_set.count }}</p>
 
 {% if average_rating %}

@@ -5,7 +5,19 @@
 <div class="container mt-5">
   <h2 class="text-center">Submit a Recipe</h2>
   {% if messages %} {% for message in messages %}
-  <div class="alert alert-success" role="alert">{{ message }}</div>
+  <div
+    {%
+    if
+    message.tags
+    %}
+    class="container {{ message.tags }}"
+    {%
+    endif
+    %}
+    role="alert"
+  >
+    {{ message }}
+  </div>
   {% endfor %} {% endif %}
   <form method="post" action="{% url 'recipe-submit' %}" class="mt-4">
     {% csrf_token %}

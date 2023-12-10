@@ -68,3 +68,15 @@ footer {
 .nav-link.active {
     color: black; 
 }
+
+.recipe-content {
+    white-space: pre-line;
+}
+
+.nutrition-info p {
+    margin-bottom: 2px;
+}
+
+.nutrition-info ul, ol {
+    list-style-type: none;
+}
