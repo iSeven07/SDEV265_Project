@@ -59,9 +59,20 @@
   </div>
 </div>
 
-  <div style="margin-top: 10px;">
-    <p><i>Created by {{ recipe.author }} on {{ recipe.date }}</i></p>
+<div style="margin-bottom: 25px;" class="row">
+  <div class="col-md-1">
+    {% if recipe.author.profile.avatar %}
+      <img class="img-rounded" style="max-width: 100px" src="{{ recipe.author.profile.avatar.url }}" alt="Avatar" />
+    {% endif %}
   </div>
+  <div class="col-md-9 d-flex align-items-center">
+    <p><br><i>Created by <a href="profile/{{recipe.author}}" class="link-dark">{{ recipe.author }}</a>
+        <br>{{ recipe.date }}
+      </i>
+    </p>
+  </div>
+</div>
+
 
   {% if user.is_authenticated %}
   <div class="rate-recipe">
