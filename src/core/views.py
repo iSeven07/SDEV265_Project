@@ -16,8 +16,6 @@
 # to make our pages functional.
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, DetailView
-from django.http import HttpResponse
 from django.contrib.auth import login, logout, authenticate
 from .models import Recipe, Profile, Rating, Ingredient, RecipeIngredient
 from .forms import SignupForm, RecipeForm, LoginForm, UpdateUserForm, UpdateProfileForm, IngredientFormSet, EditIngredientForm
@@ -28,7 +26,6 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Avg, Value, Q, Case, When, BooleanField
 from django.db.models.functions import Round
-from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory
 
 # Dummy Data

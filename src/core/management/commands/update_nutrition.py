@@ -1,3 +1,18 @@
+# = = = = = = = = = = = = #
+#        SDEV 265         #
+#     Recipe Builder      #
+# = = = = = = = = = = = = #
+#       Aaron Corns       # 
+#    Joseph Hollenbach    #
+#     Reese McGuffey      #
+#      Samuel Moore       #
+# = = = = = = = = = = = = #
+#   update_nutrition.py   #
+# = = = = = = = = = = = = #
+
+# This allows for updating an existing database if nutrition data
+# was not previously fetched.
+
 from django.core.management.base import BaseCommand
 from core.models import Ingredient
 from core.utils import fetch_nutrition_data
