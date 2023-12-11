@@ -1,3 +1,19 @@
+# = = = = = = = = = = = = #
+#        SDEV 265         #
+#     Recipe Builder      #
+# = = = = = = = = = = = = #
+#       Aaron Corns       # 
+#    Joseph Hollenbach    #
+#     Reese McGuffey      #
+#      Samuel Moore       #
+# = = = = = = = = = = = = #
+#         forms.py        #
+# = = = = = = = = = = = = #
+
+# This file is used to declare our forms. Django uses instances of forms
+# when utilized in various places in our application, such as signing up,
+# submitting recipes, and even editing a recipe.
+
 from django import forms
 from django.forms import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm
@@ -14,12 +30,14 @@ class SignupForm(UserCreationForm):
         fields = ("username", "email", "password1", "password2")
 
 
-# Recipe submission form
+# Recipe Submission Form
 class RecipeForm(forms.ModelForm):
     class Meta:
         model = Recipe
         fields = ['title', 'content', 'ingredients']
 
+# Ingredient Form - Requires multiple instances when users want to
+# add multiple recipes.
 class IngredientForm(forms.ModelForm):
     class Meta:
         model = RecipeIngredient
@@ -37,7 +55,7 @@ class IngredientForm(forms.ModelForm):
         if not ingredient_name:
             return None  # Handle the case when the field is empty
 
-        nutrition_data = fetch_nutrition_data(ingredient_name)
+        nutrition_data = fetch_nutrition_data(ingredient_name) # Get API Data
         if nutrition_data:
             ingredient, created = Ingredient.objects.get_or_create(
                 name=ingredient_name,
@@ -59,6 +77,7 @@ class IngredientForm(forms.ModelForm):
 
 IngredientFormSet = inlineformset_factory(Recipe, RecipeIngredient, form=IngredientForm, extra=1)
 
+# Edit Ingredient Form
 class EditIngredientForm(forms.ModelForm):
     class Meta:
         model = RecipeIngredient
@@ -96,6 +115,7 @@ class EditIngredientForm(forms.ModelForm):
             )
             return ingredient
 
+# Base Recipe Form
 class RecipeForm(forms.ModelForm):
 
     class Meta:
@@ -103,13 +123,13 @@ class RecipeForm(forms.ModelForm):
         fields = ['title', 'content', 'instructions']  # These are the fields you want to include in the form
 
 
-# Login form
+# Login Form
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=63)
     password = forms.CharField(max_length=63, widget=forms.PasswordInput)
 
 
-# Profile update form
+# Profile Update Form
 class UpdateUserForm(forms.ModelForm):
     username = forms.CharField(
         max_length=100,
@@ -125,7 +145,7 @@ class UpdateUserForm(forms.ModelForm):
         fields = ["username", "email"]
 
 
-# Update avatar/picture
+# Update Avatar/Photo
 class UpdateProfileForm(forms.ModelForm):
     avatar = forms.ImageField(
         widget=forms.FileInput(attrs={"class": "form-control-file"})
