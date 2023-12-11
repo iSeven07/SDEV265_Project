@@ -7,7 +7,7 @@
 {% if average_rating %}
 <p class="rate-detail">
   <span style="color: black; font-size: 18px">
-    Rating: {{ average_rating }}
+    Rating: {{ average_rating|floatformat:1 }}
     </span>
   {% for _ in full_stars %}
   <span class="star">★</span>
