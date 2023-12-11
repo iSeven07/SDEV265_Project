@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-5">
+  <h2 class="text-center">Edit Recipe</h2>
+  {% if messages %} 
+    {% for message in messages %}
+      <div 
+        {%
+        if
+        message.tags
+        %}
+        class="container {{ message.tags }}"
+        {%
+        endif
+        %}
+        role="alert"
+      >
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+  <form method="post" action="{% url 'edit_recipe' recipe.id %}" class="mt-4">
+    {% csrf_token %}
+    <div class="row justify-content-center">
+      <div class="col-md-6 mb-3">
+        <label for="id_title" class="form-label">Recipe Name</label>
+        <input type="text" class="form-control" name="title" id="id_title" value="{{ form.title.value }}" />
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-6 mb-3">
+        <label for="id_content" class="form-label">Description</label>
+        <textarea class="form-control" name="content" id="id_content" rows="5">{{ form.content.value }}</textarea>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-6 mb-3">
+        <label for="id_instructions" class="form-label">Instructions</label>
+        <textarea class="form-control" name="instructions" id="id_instructions" rows="5">{{ form.instructions.value }}</textarea>
+      </div>
+    </div>
+    <div id="ingredients-formset" class="text-center mb-3">
+      {{ formset.management_form }}
+      {% for form in formset %}
+        {{ form.as_table }}
+      {% endfor %}
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-6 text-center mb-3">
+        <button type="button" id="add-ingredient" class="btn btn-secondary">Add Ingredient</button>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-6 text-center">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- The following script allows us to dynamically add additional ingredients to our recipe. -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const formsetPrefix = '{{ formset.prefix }}';
+        const ingredientsFormset = document.getElementById('ingredients-formset');
+        const addIngredientButton = document.getElementById('add-ingredient');
+        let formsetIndex = {{ formset.total_form_count }};
+    
+        addIngredientButton.addEventListener('click', function () {
+            const newForm = document.createElement('div');
+            newForm.innerHTML = '{{ formset.empty_form|escapejs }}'.replace(/__prefix__/g, formsetIndex);
+            ingredientsFormset.appendChild(newForm);
+            formsetIndex++;
+
+            var formCount = document.querySelectorAll('[name^="{{ formset.prefix }}"]').length;
+            document.querySelector('[name="{{ formset.prefix }}-TOTAL_FORMS"]').value = formCount;
+        });
+    });
+</script>
+
+{% endblock %}

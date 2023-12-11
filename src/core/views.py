@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.http import HttpResponse
 from django.contrib.auth import login, logout, authenticate
-from .models import Recipe, Profile, Rating, Ingredient
-from .forms import SignupForm, RecipeForm, LoginForm, UpdateUserForm, UpdateProfileForm, IngredientFormSet
+from .models import Recipe, Profile, Rating, Ingredient, RecipeIngredient
+from .forms import SignupForm, RecipeForm, LoginForm, UpdateUserForm, UpdateProfileForm, IngredientFormSet, IngredientForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
@@ -12,6 +12,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Avg, Value, Q, Case, When, BooleanField
 from django.db.models.functions import Round
 from django.core.exceptions import ValidationError
+from django.forms import inlineformset_factory
 
 # Dummy Data
 posts = [
@@ -222,6 +223,27 @@ def recipe_detail(request, recipe_id):
                                                   'total_nutrition': total_nutrition,
                                                   'full_stars': full_stars,
                                                   'empty_stars': empty_stars})
+
+@login_required(login_url="/login/")
+def edit_recipe(request, recipe_id):
+    recipe = get_object_or_404(Recipe, pk=recipe_id, author=request.user)
+
+    IngredientFormSet = inlineformset_factory(Recipe, RecipeIngredient, form=IngredientForm, extra=0)
+
+    if request.method == "POST":
+        form = RecipeForm(request.POST, instance=recipe)
+        formset = IngredientFormSet(request.POST, instance=recipe)
+
+        if form.is_valid() and formset.is_valid():
+            form.save()
+            formset.save()
+            return redirect('recipe_detail', recipe_id=recipe.pk)
+
+    else:
+        form = RecipeForm(instance=recipe)
+        formset = IngredientFormSet(instance=recipe)
+
+    return render(request, 'edit_recipe.html', {'form': form, 'formset': formset, 'recipe': recipe})
 
 
 # Rating Submission requires login
