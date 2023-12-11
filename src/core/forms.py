@@ -31,6 +31,45 @@ class IngredientForm(forms.ModelForm):
     ingredient = forms.CharField(max_length=100, required=False)
     quantity = forms.DecimalField(max_digits=5, decimal_places=2)
 
+    def clean_ingredient(self):
+        ingredient_name = self.cleaned_data['ingredient']
+        print(f'Cleaned Ingredient Name: {ingredient_name}')
+        if not ingredient_name:
+            return None  # Handle the case when the field is empty
+
+        nutrition_data = fetch_nutrition_data(ingredient_name)
+        if nutrition_data:
+            ingredient, created = Ingredient.objects.get_or_create(
+                name=ingredient_name,
+                defaults={
+                    'calories': nutrition_data['calories'],
+                    'protein': nutrition_data['protein'],
+                    'fat': nutrition_data['fat'],
+                    'carbohydrates': nutrition_data['carbs'],
+                }
+            )
+            return ingredient
+        else:
+            # If nutrition data is not available, create the Ingredient object with default values
+            ingredient, created = Ingredient.objects.get_or_create(
+                name=ingredient_name,
+                defaults={'calories': 0, 'protein': 0, 'fat': 0, 'carbohydrates': 0}
+            )
+            return ingredient
+
+IngredientFormSet = inlineformset_factory(Recipe, RecipeIngredient, form=IngredientForm, extra=1)
+
+class EditIngredientForm(forms.ModelForm):
+    class Meta:
+        model = RecipeIngredient
+        fields = ['ingredient', 'quantity']
+        widgets = {
+            'ingredient': forms.TextInput(attrs={'placeholder': 'Enter ingredient name', 'readonly': 'readonly'}),
+        }
+
+    ingredient = forms.CharField(max_length=100, required=False)
+    quantity = forms.DecimalField(max_digits=5, decimal_places=2)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -63,8 +102,6 @@ class IngredientForm(forms.ModelForm):
                 defaults={'calories': 0, 'protein': 0, 'fat': 0, 'carbohydrates': 0}
             )
             return ingredient
-
-IngredientFormSet = inlineformset_factory(Recipe, RecipeIngredient, form=IngredientForm, extra=1)
 
 class RecipeForm(forms.ModelForm):
 
