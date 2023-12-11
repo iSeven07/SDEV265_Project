@@ -7,6 +7,7 @@ urlpatterns = [
     path(
         "submit_recipe/", views.submit_recipe, name="recipe-submit"
     ),  # Recipe submission page
+    path('edit_recipe/<int:recipe_id>/', views.edit_recipe, name='edit_recipe'),
     path(
         "recipe/<int:recipe_id>/", views.recipe_detail, name="recipe_detail"
     ),  # Recipe detail page

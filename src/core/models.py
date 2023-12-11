@@ -58,7 +58,7 @@ class RecipeIngredient(models.Model):
         db_table = 'core_recipes_ingredients'
 
     def __str__(self):
-        return self.title
+        return self.ingredient.name
 
 
 # Rating system for recipe entries
