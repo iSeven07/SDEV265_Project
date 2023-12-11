@@ -1,3 +1,20 @@
+# = = = = = = = = = = = = #
+#        SDEV 265         #
+#     Recipe Builder      #
+# = = = = = = = = = = = = #
+#       Aaron Corns       # 
+#    Joseph Hollenbach    #
+#     Reese McGuffey      #
+#      Samuel Moore       #
+# = = = = = = = = = = = = #
+#         urls.py         #
+# = = = = = = = = = = = = #
+
+# URLs is where you identify your URL patterns. It is how Django
+# knows where it should send the user based on the path. In some cases
+# a variable is included such as a recipe_id or profile so that the relevant
+# information can be pulled. Once matched, the URL will send data to the view.
+
 from django.urls import path
 from . import views
 

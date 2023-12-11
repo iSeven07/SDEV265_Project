@@ -1,6 +1,21 @@
+# = = = = = = = = = = = = #
+#        SDEV 265         #
+#     Recipe Builder      #
+# = = = = = = = = = = = = #
+#       Aaron Corns       # 
+#    Joseph Hollenbach    #
+#     Reese McGuffey      #
+#      Samuel Moore       #
+# = = = = = = = = = = = = #
+#        views.py         #
+# = = = = = = = = = = = = #
+
+# This is where data is primarily processed for each page. Depending on
+# the URL path it will be matched with a view here. That view will utilize an
+# html template, located in the templates folder, and send data back and forth
+# to make our pages functional.
+
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, DetailView
-from django.http import HttpResponse
 from django.contrib.auth import login, logout, authenticate
 from .models import Recipe, Profile, Rating, Ingredient, RecipeIngredient
 from .forms import SignupForm, RecipeForm, LoginForm, UpdateUserForm, UpdateProfileForm, IngredientFormSet, EditIngredientForm
@@ -11,7 +26,6 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Avg, Value, Q, Case, When, BooleanField
 from django.db.models.functions import Round
-from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory
 
 # Dummy Data
@@ -82,11 +96,13 @@ def register(request):
         {"title": "Register", "form": form, "message": message},
     )
 
+# Submit Recipe View
 def submit_recipe(request):
     if request.method == "POST":
-        form = RecipeForm(request.POST)
-        formset = IngredientFormSet(request.POST)
+        form = RecipeForm(request.POST) # Set the base form to Recipe
+        formset = IngredientFormSet(request.POST) # This sets our formset to Ingreidents. It is a set because there can be multiple.
 
+        # Django automatically checks to see if data entered is valid against our Models and Forms
         if form.is_valid() and formset.is_valid():
         # Check if at least one ingredient has been provided
             if any(form.cleaned_data.get('ingredient') for form in formset):
@@ -99,7 +115,7 @@ def submit_recipe(request):
 
                 return redirect('recipe_detail', recipe_id=new_recipe.pk)
             else:
-                # Add an error message if no ingredients are provided
+                # Adds an error message if no ingredients are provided
                 messages.error(request, 'At least one ingredient is required.', extra_tags="alert alert-danger")
                 return render(request, 'recipe_submission.html', {'form': form, 'formset': formset})
 
@@ -133,7 +149,7 @@ def login_page(request):
     return render(request, "login.html", context={"form": form, "message": message})
 
 
-# Logout
+# Logs out the user
 def logout_user(request):
     logout(request)
     messages.success(
@@ -174,14 +190,14 @@ def edit_profile(request):
     )
 
 
-# Change Password View
+# Change Password View, Accessible from Edit Profile
 class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
     template_name = "change_password.html"
     success_message = "Successfully Changed Your Password"
     success_url = reverse_lazy("edit-profile")
 
 
-# Search Bar
+# Search Bar, Handles Search Data and Displays a Results Page
 def search_bar(request):
     query = request.GET.get("query")
 
@@ -209,7 +225,7 @@ def recipe_detail(request, recipe_id):
     average_rating = ratings.aggregate(avg_rating=Avg("rating"))["avg_rating"]
     total_nutrition = recipe.calculate_total_nutrition()
 
-    # Calculate stars
+    # Calculate Stars for Recipe out of 5
     if average_rating:
         full_stars = range(int(average_rating))
         empty_stars = range(5 - int(average_rating))
@@ -224,6 +240,7 @@ def recipe_detail(request, recipe_id):
                                                   'full_stars': full_stars,
                                                   'empty_stars': empty_stars})
 
+# Edit Recipe View. Users must be logged in to access.
 @login_required(login_url="/login/")
 def edit_recipe(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id, author=request.user)
@@ -246,7 +263,7 @@ def edit_recipe(request, recipe_id):
     return render(request, 'edit_recipe.html', {'form': form, 'formset': formset, 'recipe': recipe})
 
 
-# Rating Submission requires login
+# Allows users to Rate Recipes. They must be logged in to do so.
 @login_required(login_url="/login/")
 def rate_recipe(request, recipe_id):
     if request.method == 'POST':

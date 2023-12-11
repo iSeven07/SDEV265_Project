@@ -1,6 +1,23 @@
+# = = = = = = = = = = = = #
+#        SDEV 265         #
+#     Recipe Builder      #
+# = = = = = = = = = = = = #
+#       Aaron Corns       # 
+#    Joseph Hollenbach    #
+#     Reese McGuffey      #
+#      Samuel Moore       #
+# = = = = = = = = = = = = #
+#        testapi.py       #
+# = = = = = = = = = = = = #
+
+# When having issues with API calls within Recipe Builder
+# This file helps in detecting if we are properly receiving
+# data back.
+
 import requests
 from decouple import config
 
+# This function uses the app_id and app_key to query a food item that it receives. 
 def fetch_nutrition_data(ingredient_name, quantity=None):
     app_id = config('EDAMAM_APP_ID', default='')
     app_key = config('EDAMAM_APP_KEY', default='')
@@ -29,7 +46,7 @@ def fetch_nutrition_data(ingredient_name, quantity=None):
         print(f"Could not retrieve nutrition data for {ingredient_name}.")
         return None
 
-# Example usage
+# This is a test case using "orange".
 ingredient_name = "orange"
 nutrition_data = fetch_nutrition_data(ingredient_name)
 
