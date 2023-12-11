@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView
 from django.http import HttpResponse
 from django.contrib.auth import login, logout, authenticate
 from .models import Recipe, Profile, Rating, Ingredient, RecipeIngredient
-from .forms import SignupForm, RecipeForm, LoginForm, UpdateUserForm, UpdateProfileForm, IngredientFormSet, IngredientForm
+from .forms import SignupForm, RecipeForm, LoginForm, UpdateUserForm, UpdateProfileForm, IngredientFormSet, EditIngredientForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
@@ -228,7 +228,7 @@ def recipe_detail(request, recipe_id):
 def edit_recipe(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id, author=request.user)
 
-    IngredientFormSet = inlineformset_factory(Recipe, RecipeIngredient, form=IngredientForm, extra=0)
+    IngredientFormSet = inlineformset_factory(Recipe, RecipeIngredient, form=EditIngredientForm, extra=0)
 
     if request.method == "POST":
         form = RecipeForm(request.POST, instance=recipe)
