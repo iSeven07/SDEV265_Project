@@ -19,10 +19,6 @@
 <p>No Ratings</p>
 {% endif %}
 
-{% if user.is_authenticated and recipe.author == user %}
-<a href="{% url 'edit_recipe' recipe_id=recipe.id %}">Edit Recipe</a>
-{% endif %}
-
 <div style="margin-bottom: 25px;" class="recipe-content">
   <p style="margin-bottom: 0px;"><b>Description</b></p>
   <p style="margin-top: 0px;">{{ recipe.content|linebreaksbr }}</p>
@@ -62,6 +58,12 @@
     </ul>
   </div>
 </div>
+
+{% if user.is_authenticated and recipe.author == user %}
+<div>
+<p><a href="{% url 'edit_recipe' recipe_id=recipe.id %}">Edit Recipe</a></p>
+</div>
+{% endif %}
 
 <div style="margin-bottom: 25px;" class="row">
   <div class="col-md-1">

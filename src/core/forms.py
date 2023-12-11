@@ -25,14 +25,22 @@ class IngredientForm(forms.ModelForm):
         model = RecipeIngredient
         fields = ['ingredient', 'quantity']
         widgets = {
-            'ingredient': forms.TextInput(attrs={'placeholder': 'Enter ingredient name'}),
+            'ingredient': forms.TextInput(attrs={'placeholder': 'Enter ingredient name', 'readonly': 'readonly'}),
         }
 
     ingredient = forms.CharField(max_length=100, required=False)
     quantity = forms.DecimalField(max_digits=5, decimal_places=2)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Customize the display of ingredient names
+        if self.instance and self.instance.ingredient:
+            self.initial['ingredient'] = str(self.instance.ingredient.name)
+
     def clean_ingredient(self):
         ingredient_name = self.cleaned_data['ingredient']
+        print(f'Cleaned Ingredient Name: {ingredient_name}')
         if not ingredient_name:
             return None  # Handle the case when the field is empty
 
