@@ -44,8 +44,20 @@
     <div id="ingredients-formset" class="text-center mb-3">
       {{ formset.management_form }}
       {% for form in formset %}
-        <p>{{ form.as_table }}</p>
-      {% endfor %}
+      <p>{{ form.as_table }}</p>
+  
+      <!-- Add a conditional to set the ingredient value based on the instance -->
+      {% if form.instance and form.instance.ingredient %}
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            const ingredientField = document.querySelector('#{{ form.ingredient.id_for_label }}');
+            if (ingredientField) {
+              ingredientField.value = '{{ form.instance.ingredient.name }}';
+            }
+          });
+        </script>
+      {% endif %}
+    {% endfor %}
     </div>
     <div class="row justify-content-center">
       <div class="col-md-6 text-center mb-3">
@@ -74,8 +86,8 @@
             ingredientsFormset.appendChild(newForm);
             formsetIndex++;
 
-            var formCount = document.querySelectorAll('[name^="{{ formset.prefix }}"]').length;
-            document.querySelector('[name="{{ formset.prefix }}-TOTAL_FORMS"]').value = formCount;
+            var formCount = document.querySelectorAll('[name^="recipeingredient_set-"]').length;
+            document.querySelector('[name="recipeingredient_set-TOTAL_FORMS"]').value = formCount;
         });
     });
 </script>
